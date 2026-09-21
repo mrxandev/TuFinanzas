@@ -1,1 +1,12 @@
 @import "tailwindcss";
+@plugin "daisyui";
+
+@theme {
+  --color-primary: #a78bfa;
+  --color-primary-content: #ffffff;
+}
+
+[data-theme="light"] {
+  --color-primary: #a78bfa;
+  --color-primary-content: #ffffff;
+}
