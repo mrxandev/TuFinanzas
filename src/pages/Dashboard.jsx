@@ -90,7 +90,7 @@ export const Dashboard = () => {
       {/* Alerta Destacada si superó el límite mensual */}
       {limiteInfo?.supero_limite && (
         <div className="alert alert-error shadow-md text-white">
-          <AlertTriangle className="w-6 h-6 flex-shrink-0" />
+          <AlertTriangle className="w-6 h-6 shrink-0" />
           <div>
             <h3 className="font-bold text-lg">Alerta de Límite de Egresos Excedido</h3>
             <div className="text-sm">

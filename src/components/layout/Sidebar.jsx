@@ -11,7 +11,7 @@ import {
   User,
 } from "lucide-react";
 
-export const Sidebar = ({ isCollapsed }) => {
+export const Sidebar = () => {
   const { isAdmin } = useAuth();
 
   const menuItems = [
@@ -30,11 +30,7 @@ export const Sidebar = ({ isCollapsed }) => {
   menuItems.push({ label: "Mi Perfil", path: "/perfil", icon: User });
 
   return (
-    <aside
-      className={`${
-        isCollapsed ? "w-20" : "w-64"
-      } bg-base-100 border border-base-300 rounded-xl p-3 shadow-sm flex flex-col justify-between transition-all duration-200 h-full`}
-    >
+    <aside className="w-64 bg-base-100 border border-base-300 rounded-xl p-3 shadow-sm flex flex-col justify-between h-full">
       <ul className="menu menu-md w-full gap-1 p-0">
         {menuItems.map((item) => {
           const Icon = item.icon;
@@ -43,18 +39,15 @@ export const Sidebar = ({ isCollapsed }) => {
               <NavLink
                 to={item.path}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 py-3 rounded-lg font-medium transition-colors ${
-                    isCollapsed ? "justify-center px-0" : "px-4"
-                  } ${
+                  `flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${
                     isActive
                       ? "bg-primary text-primary-content font-semibold"
                       : "hover:bg-base-200 text-base-content"
                   }`
                 }
-                title={isCollapsed ? item.label : ""}
               >
                 <Icon className="w-5 h-5 flex-shrink-0" />
-                {!isCollapsed && <span>{item.label}</span>}
+                <span>{item.label}</span>
               </NavLink>
             </li>
           );

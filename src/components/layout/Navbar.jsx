@@ -1,59 +1,20 @@
-import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
-import api from "../../services/api";
-import { LogOut, User, Shield, AlertTriangle, Wallet, Menu } from "lucide-react";
+import { LogOut, User, Shield, Wallet } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export const Navbar = ({ onToggleSidebar }) => {
+export const Navbar = () => {
   const { user, logout } = useAuth();
-  const [limiteInfo, setLimiteInfo] = useState(null);
-
-  /* Carga información sobre el límite de gasto del usuario */
-  useEffect(() => {
-    if (user?.id) {
-      api.get(`/usuarios/${user.id}/limite-status`)
-        .then((res) => setLimiteInfo(res.data.data))
-        .catch(() => setLimiteInfo(null));
-    }
-  }, [user]);
 
   return (
-    <header className="navbar bg-base-100 border border-base-300 rounded-xl px-4 shadow-sm z-30 min-h-14">
-      <div className="flex-1 gap-3">
-        {/* Botón para colapsar / desplegar menú lateral */}
-        <button
-          onClick={onToggleSidebar}
-          className="btn btn-ghost btn-square btn-sm text-base-content/80 hover:text-primary"
-          title="Desplegar / Minimizar Menú"
-        >
-          <Menu className="w-5 h-5" />
-        </button>
-
+    <header className="navbar bg-base-100 border border-base-300 rounded-xl px-4 shadow-sm z-30 min-h-14 justify-between">
+      <div className="flex items-center gap-2">
         <span className="font-bold text-xl tracking-tight text-primary flex items-center gap-2">
           <Wallet className="w-6 h-6 text-primary" />
           TuFinanzas
         </span>
-
-        {/* Badge indicador rápido de consumo de límite */}
-        {limiteInfo && (
-          <div className="hidden md:flex items-center gap-2 ml-4">
-            <div
-              className={`badge badge-lg gap-1 font-medium ${
-                limiteInfo.supero_limite
-                  ? "badge-error text-white"
-                  : limiteInfo.porcentaje_consumido > 80
-                  ? "badge-warning"
-                  : "badge-outline badge-primary"
-              }`}
-            >
-              {limiteInfo.supero_limite && <AlertTriangle className="w-4 h-4" />}
-              <span>Límite: {limiteInfo.porcentaje_consumido}%</span>
-            </div>
-          </div>
-        )}
       </div>
 
-      <div className="flex-none gap-3">
+      <div className="flex items-center gap-3">
         {/* Información y Menú desplegable de Perfil */}
         <div className="dropdown dropdown-end">
           <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar border border-base-300">
