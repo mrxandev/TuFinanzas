@@ -98,6 +98,38 @@ export const Usuarios = () => {
       return;
     }
 
+    const lim = Number(formData.limite_egresos);
+    if (isNaN(lim) || lim < 0) {
+      Swal.fire({
+        icon: "warning",
+        title: "Límite Inválido",
+        text: "El límite mensual de egresos debe ser mayor o igual a RD$ 0.00.",
+        confirmButtonColor: "#f59e0b",
+      });
+      return;
+    }
+
+    if (lim > 999999999999.99) {
+      Swal.fire({
+        icon: "warning",
+        title: "Límite Excedido",
+        text: "El límite mensual de egresos no puede superar los RD$ 999,999,999,999.99.",
+        confirmButtonColor: "#f59e0b",
+      });
+      return;
+    }
+
+    const corte = Number(formData.fecha_corte);
+    if (isNaN(corte) || corte < 1 || corte > 31) {
+      Swal.fire({
+        icon: "warning",
+        title: "Día de Corte Inválido",
+        text: "El día de corte debe ser un número entero entre 1 y 31.",
+        confirmButtonColor: "#f59e0b",
+      });
+      return;
+    }
+
     setSubmitting(true);
     try {
       if (editingId) {
@@ -342,7 +374,10 @@ export const Usuarios = () => {
                   <label className="label py-1 text-xs font-semibold">Límite Egresos (RD$)</label>
                   <input
                     type="number"
-                    className="input input-bordered input-sm"
+                    step="0.01"
+                    min="0"
+                    max="999999999999.99"
+                    className="input input-bordered input-sm font-semibold"
                     value={formData.limite_egresos}
                     onChange={(e) => setFormData({ ...formData, limite_egresos: e.target.value })}
                     disabled={submitting}

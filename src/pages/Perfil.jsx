@@ -28,13 +28,46 @@ export const Perfil = () => {
   /* Guardar cambios de perfil */
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
+
+    const lim = Number(profileForm.limite_egresos);
+    if (isNaN(lim) || lim < 0) {
+      Swal.fire({
+        icon: "warning",
+        title: "Límite Inválido",
+        text: "El límite mensual de egresos debe ser un monto numérico mayor o igual a RD$ 0.00.",
+        confirmButtonColor: "#f59e0b",
+      });
+      return;
+    }
+
+    if (lim > 999999999999.99) {
+      Swal.fire({
+        icon: "warning",
+        title: "Límite Excedido",
+        text: "El límite mensual de egresos no puede superar los RD$ 999,999,999,999.99.",
+        confirmButtonColor: "#f59e0b",
+      });
+      return;
+    }
+
+    const corte = Number(profileForm.fecha_corte);
+    if (isNaN(corte) || corte < 1 || corte > 31) {
+      Swal.fire({
+        icon: "warning",
+        title: "Día de Corte Inválido",
+        text: "El día de corte debe ser un número entero entre 1 y 31.",
+        confirmButtonColor: "#f59e0b",
+      });
+      return;
+    }
+
     setLoadingProfile(true);
     try {
       const res = await api.put(`/usuarios/${user.id}`, {
         nombre: profileForm.nombre,
-        limite_egresos: Number(profileForm.limite_egresos),
+        limite_egresos: lim,
         tipo_persona: profileForm.tipo_persona,
-        fecha_corte: Number(profileForm.fecha_corte),
+        fecha_corte: corte,
       });
 
       const updated = res.data.data.usuario || res.data.data;
@@ -88,7 +121,7 @@ export const Perfil = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-base-200">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-base-content flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-[#a78bfa]/10 text-[#a78bfa]">
+            <div className="p-2.5 rounded-2xl bg-primary/10 text-primary">
               <User className="w-7 h-7" />
             </div>
             Mi Perfil
@@ -106,7 +139,7 @@ export const Perfil = () => {
           <div className="card-body p-6 sm:p-8 space-y-6">
             <div className="flex items-center justify-between border-b border-base-200 pb-4">
               <h2 className="font-bold text-xl text-base-content flex items-center gap-3">
-                <User className="w-5 h-5 text-[#a78bfa]" /> Datos Personales
+                <User className="w-5 h-5 text-primary" /> Datos Personales
               </h2>
               <span className="text-xs text-base-content/50 font-medium">Información de la Cuenta</span>
             </div>
@@ -197,12 +230,16 @@ export const Perfil = () => {
                       type="number"
                       step="0.01"
                       min="0"
+                      max="999999999999.99"
                       className="join-item input input-bordered input-md w-full text-sm font-semibold rounded-r-xl"
                       value={profileForm.limite_egresos}
                       onChange={(e) => setProfileForm({ ...profileForm, limite_egresos: e.target.value })}
                       required
                     />
                   </div>
+                  <span className="text-[11px] text-base-content/50 mt-1">
+                    Máx: RD$ 999,999,999,999.99 (0 para sin límite)
+                  </span>
                 </div>
 
                 <div className="form-control">
@@ -221,6 +258,9 @@ export const Perfil = () => {
                     />
                     <Calendar className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-base-content/40" />
                   </div>
+                  <span className="text-[11px] text-base-content/50 mt-1">
+                    Día en que cierra la facturación mensual
+                  </span>
                 </div>
               </div>
 
@@ -229,7 +269,7 @@ export const Perfil = () => {
                 <button
                   type="submit"
                   disabled={loadingProfile}
-                  className="btn btn-primary px-8 h-11 rounded-xl font-semibold gap-2 shadow-sm"
+                  className="btn btn-primary px-8 h-11 rounded-xl font-semibold gap-2"
                 >
                   {loadingProfile ? (
                     <span className="loading loading-spinner loading-sm"></span>
@@ -249,7 +289,7 @@ export const Perfil = () => {
             <div className="card-body p-6 sm:p-8 space-y-6">
               <div className="flex items-center justify-between border-b border-base-200 pb-4">
                 <h2 className="font-bold text-xl text-base-content flex items-center gap-3">
-                  <Key className="w-5 h-5 text-[#a78bfa]" /> Seguridad
+                  <Key className="w-5 h-5 text-primary" /> Seguridad
                 </h2>
                 <ShieldCheck className="w-5 h-5 text-emerald-500" />
               </div>

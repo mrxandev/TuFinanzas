@@ -19,7 +19,7 @@ export const Layout = () => {
       <div className="flex flex-1 overflow-hidden min-h-0 relative">
         <div
           className={`transition-all duration-300 ease-in-out shrink-0 border-r border-base-200 ${
-            isMinimized ? "w-20" : "w-64"
+            isMinimized ? "w-20 overflow-visible z-20" : "w-64"
           }`}
         >
           <Sidebar isMinimized={isMinimized} />

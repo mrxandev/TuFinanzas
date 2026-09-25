@@ -4,9 +4,9 @@
 }
 
 :root {
-  --primary-color: #a78bfa;
-  --primary-hover: #8b5cf6;
-  --primary-text: #1e1b4b;
+  --primary-color: #3b82f6;
+  --primary-hover: #2563eb;
+  --primary-text: #ffffff;
 }
 
 html, body, #root {
@@ -17,7 +17,7 @@ html, body, #root {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-/* Forzar primario morado suave #a78bfa de forma global */
+/* Forzar primario azul #3b82f6 de forma global */
 .btn-primary {
   background-color: var(--primary-color) !important;
   border-color: var(--primary-color) !important;
@@ -54,9 +54,14 @@ html, body, #root {
 
 /* Estilos de bordes y enfoque uniforme para inputs */
 .input:focus, .select:focus, .textarea:focus {
-  outline: 2px solid rgba(167, 139, 250, 0.4) !important;
+  outline: 2px solid rgba(59, 130, 246, 0.4) !important;
   outline-offset: 1px !important;
   border-color: var(--primary-color) !important;
+}
+
+/* Eliminar completamente el efecto shadow de todos los botones */
+.btn, .btn:hover, .btn:focus, .btn:active, .btn:focus-visible {
+  box-shadow: none !important;
 }
 
 /* Transiciones suaves en tarjetas y botones */

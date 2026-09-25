@@ -50,6 +50,38 @@ export const Register = () => {
       return;
     }
 
+    const lim = Number(formData.limite_egresos);
+    if (isNaN(lim) || lim < 0) {
+      Swal.fire({
+        icon: "warning",
+        title: "Límite Inválido",
+        text: "El límite mensual de egresos debe ser mayor o igual a RD$ 0.00.",
+        confirmButtonColor: "#f59e0b",
+      });
+      return;
+    }
+
+    if (lim > 999999999999.99) {
+      Swal.fire({
+        icon: "warning",
+        title: "Límite Excedido",
+        text: "El límite mensual de egresos no puede superar los RD$ 999,999,999,999.99.",
+        confirmButtonColor: "#f59e0b",
+      });
+      return;
+    }
+
+    const corte = Number(formData.fecha_corte);
+    if (isNaN(corte) || corte < 1 || corte > 31) {
+      Swal.fire({
+        icon: "warning",
+        title: "Día de Corte Inválido",
+        text: "El día de corte debe ser un número entero entre 1 y 31.",
+        confirmButtonColor: "#f59e0b",
+      });
+      return;
+    }
+
     setLoading(true);
     try {
       await register(formData);
@@ -179,10 +211,12 @@ export const Register = () => {
                 <input
                   type="number"
                   name="limite_egresos"
+                  step="0.01"
+                  min="0"
+                  max="999999999999.99"
                   className="input input-bordered input-sm w-full"
                   value={formData.limite_egresos}
                   onChange={handleChange}
-                  min="0"
                   required
                 />
               </div>

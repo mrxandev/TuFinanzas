@@ -31,8 +31,8 @@ export const Sidebar = ({ isMinimized }) => {
 
   return (
     <aside
-      className={`h-full bg-base-100 flex flex-col justify-between overflow-y-auto transition-all duration-300 ${
-        isMinimized ? "w-20 p-2" : "w-64 p-4"
+      className={`h-full bg-base-100 flex flex-col justify-between transition-all duration-300 ${
+        isMinimized ? "w-20 p-2 overflow-visible" : "w-64 p-4 overflow-y-auto"
       }`}
     >
       <ul className="menu menu-md w-full gap-1.5 p-0">
@@ -47,7 +47,7 @@ export const Sidebar = ({ isMinimized }) => {
                   className={({ isActive }) =>
                     `flex items-center justify-center w-12 h-12 rounded-xl transition-all ${
                       isActive
-                        ? "bg-primary text-primary-content font-semibold shadow-sm"
+                        ? "bg-primary text-primary-content font-semibold"
                         : "hover:bg-base-200 text-base-content"
                     }`
                   }

@@ -334,7 +334,7 @@ export const Transacciones = () => {
               />
               <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-base-content/40" />
             </div>
-            <button onClick={() => fetchTransacciones(1)} className="btn btn-primary h-11 px-6 rounded-xl font-semibold gap-2 shadow-sm">
+            <button onClick={() => fetchTransacciones(1)} className="btn btn-primary h-11 px-6 rounded-xl font-semibold gap-2">
               <Filter className="w-4 h-4" /> Filtrar Resultados
             </button>
           </div>
@@ -478,7 +478,7 @@ export const Transacciones = () => {
           <div className="modal-box max-w-xl p-6 sm:p-8 rounded-2xl border border-base-200 shadow-xl">
             <div className="flex items-center justify-between pb-4 mb-4 border-b border-base-200">
               <h3 className="font-bold text-xl text-base-content flex items-center gap-2">
-                <Plus className="w-5 h-5 text-[#a78bfa]" />
+                <Plus className="w-5 h-5 text-primary" />
                 {editingId ? "Editar Transacción" : "Registrar Transacción"}
               </h3>
               <button
@@ -668,7 +668,7 @@ export const Transacciones = () => {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="btn btn-primary h-11 px-8 rounded-xl font-semibold gap-2 shadow-sm"
+                  className="btn btn-primary h-11 px-8 rounded-xl font-semibold gap-2"
                 >
                   {submitting && <span className="loading loading-spinner loading-sm"></span>}
                   Guardar Transacción

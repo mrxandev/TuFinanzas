@@ -91,7 +91,7 @@ export const exportReporteCortesPDF = (reporte, anio) => {
     "Resumen de cierres mensuales, balances acumulados y verificación de límites"
   );
 
-  const resumen = reporte.resumen || {};
+  const resumen = reporte.resumen || reporte.totales_consolidados || {};
   const pageWidth = doc.internal.pageSize.getWidth();
   const cardWidth = (pageWidth - 28 - 9) / 4;
   const cardY = startY;
@@ -99,10 +99,10 @@ export const exportReporteCortesPDF = (reporte, anio) => {
 
   // Tarjetas KPI de resumen
   const kpis = [
-    { label: "Total Cortes", val: String(resumen.total_cortes || 0), color: [30, 41, 59] },
+    { label: "Total Cortes", val: String(resumen.total_cortes ?? resumen.total_periodos_cerrados ?? 0), color: [30, 41, 59] },
     { label: "Ingresos Anuales", val: formatCurrency(resumen.total_ingresos), color: [22, 101, 52] },
     { label: "Egresos Anuales", val: formatCurrency(resumen.total_egresos), color: [185, 28, 28] },
-    { label: "Cortes Excedidos", val: String(resumen.cortes_superaron_limite || 0), color: [180, 83, 9] },
+    { label: "Cortes Excedidos", val: String(resumen.cortes_superaron_limite ?? resumen.meses_supero_limite ?? 0), color: [180, 83, 9] },
   ];
 
   kpis.forEach((kpi, idx) => {
@@ -196,9 +196,9 @@ export const exportReporteLimitesPDF = (reporte) => {
   const cardHeight = 16;
 
   const kpis = [
-    { label: "Total Evaluaciones", val: String(stats.total_evaluaciones || 0), color: [30, 41, 59] },
-    { label: "Periodos en Regla", val: String(stats.periodos_en_regla || 0), color: [22, 101, 52] },
-    { label: "Periodos Excedidos", val: String(stats.periodos_excedidos || 0), color: [185, 28, 28] },
+    { label: "Total Evaluaciones", val: String(stats.total_evaluaciones ?? 0), color: [30, 41, 59] },
+    { label: "Periodos en Regla", val: String(stats.periodos_en_regla ?? 0), color: [22, 101, 52] },
+    { label: "Periodos Excedidos", val: String(stats.periodos_excedidos ?? 0), color: [185, 28, 28] },
   ];
 
   kpis.forEach((kpi, idx) => {
@@ -285,16 +285,20 @@ export const exportResumenAnualPDF = (resumen, anio) => {
   let totalBalance = 0;
 
   const tableData = (resumen.meses || []).map((m) => {
-    totalIngresos += Number(m.ingresos || 0);
-    totalEgresos += Number(m.egresos || 0);
-    totalBalance += Number(m.balance || 0);
+    const ing = Number(m.ingresos ?? m.total_ingresos ?? 0);
+    const egr = Number(m.egresos ?? m.total_egresos ?? 0);
+    const bal = Number(m.balance ?? m.balance_al_corte ?? 0);
+
+    totalIngresos += ing;
+    totalEgresos += egr;
+    totalBalance += bal;
 
     return [
       `Mes ${m.mes} (${m.nombre_mes})`,
-      formatCurrency(m.ingresos),
-      formatCurrency(m.egresos),
-      formatCurrency(m.balance),
-      m.balance >= 0 ? "SUPERÁVIT" : "DÉFICIT",
+      formatCurrency(ing),
+      formatCurrency(egr),
+      formatCurrency(bal),
+      bal >= 0 ? "SUPERÁVIT" : "DÉFICIT",
     ];
   });
 

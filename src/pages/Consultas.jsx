@@ -122,7 +122,7 @@ export const Consultas = () => {
         <button
           onClick={handleExportPDF}
           disabled={loading || transacciones.length === 0}
-          className="btn btn-primary btn-sm gap-2 shadow-sm"
+          className="btn btn-primary btn-sm gap-2"
           title="Exportar los resultados de la consulta a PDF"
         >
           <Download className="w-4 h-4" /> Exportar PDF
