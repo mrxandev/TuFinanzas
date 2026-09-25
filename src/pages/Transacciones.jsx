@@ -595,6 +595,7 @@ export const Transacciones = () => {
                     value={formData.fecha_transaccion}
                     onChange={(e) => setFormData({ ...formData, fecha_transaccion: e.target.value })}
                     disabled={submitting}
+                    max={new Date().toISOString().split("T")[0]}
                     required
                   />
                 </div>

@@ -44,10 +44,20 @@ export const Cortes = () => {
     fetchCortes(1);
   }, [fetchCortes]);
 
-  /* Ejecución del proceso de cierre de corte mensual con protección contra doble envío */
   const handleProcesarCorte = async (e) => {
     e.preventDefault();
     if (submitting) return;
+
+    const today = new Date();
+    if (Number(procesarForm.anio) > today.getFullYear() || 
+       (Number(procesarForm.anio) === today.getFullYear() && Number(procesarForm.mes) > today.getMonth() + 1)) {
+       Swal.fire({
+         icon: "error",
+         title: "Fecha Inválida",
+         text: "No puedes procesar un corte para un mes/año en el futuro."
+       });
+       return;
+    }
 
     const confirmResult = await Swal.fire({
       title: "¿Procesar Corte Mensual?",
@@ -206,6 +216,7 @@ export const Cortes = () => {
                     value={procesarForm.anio}
                     onChange={(e) => setProcesarForm({ ...procesarForm, anio: e.target.value })}
                     disabled={submitting}
+                    max={new Date().getFullYear()}
                     required
                   />
                 </div>
