@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import api from "../services/api";
 import Swal from "sweetalert2";
-import { Plus, Edit, Trash2, Tag, Layers, CreditCard, Bookmark, Landmark } from "lucide-react";
+import { Plus, Edit, Trash2, Tag, Layers, CreditCard, Bookmark, Landmark, Shield } from "lucide-react";
 
 export const Catalogos = () => {
   const [activeTab, setActiveTab] = useState("tipos-egresos");
@@ -158,7 +158,12 @@ export const Catalogos = () => {
       {/* Encabezado */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Catálogos Maestros</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-bold tracking-tight">Catálogos Maestros</h1>
+            <span className="badge badge-secondary badge-sm flex items-center gap-1 font-semibold">
+              <Shield className="w-3 h-3" /> Solo Admin
+            </span>
+          </div>
           <p className="text-sm text-base-content/60">
             Administra las clasificaciones y plantillas del sistema.
           </p>

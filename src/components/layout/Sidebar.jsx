@@ -17,13 +17,13 @@ export const Sidebar = () => {
   const menuItems = [
     { label: "Dashboard", path: "/", icon: LayoutDashboard },
     { label: "Transacciones", path: "/transacciones", icon: ArrowRightLeft },
-    { label: "Catálogos", path: "/catalogos", icon: FolderKanban },
     { label: "Cortes Mensuales", path: "/cortes", icon: CalendarCheck },
     { label: "Consultas", path: "/consultas", icon: Search },
     { label: "Reportes Analíticos", path: "/reportes", icon: BarChart3 },
   ];
 
   if (isAdmin) {
+    menuItems.push({ label: "Catálogos Maestros", path: "/catalogos", icon: FolderKanban });
     menuItems.push({ label: "Gestión Usuarios", path: "/usuarios", icon: Users });
   }
 

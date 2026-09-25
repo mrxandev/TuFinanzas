@@ -1,7 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import api from "../services/api";
 import { formatCurrency, formatDate } from "../utils/formatters";
-import { BarChart3, ShieldAlert, Calendar } from "lucide-react";
+import { BarChart3, ShieldAlert, Calendar, Download, FileText } from "lucide-react";
+import {
+  exportReporteCortesPDF,
+  exportReporteLimitesPDF,
+  exportResumenAnualPDF,
+} from "../utils/pdfExport";
 
 export const Reportes = () => {
   const [activeTab, setActiveTab] = useState("cortes");
@@ -57,6 +62,17 @@ export const Reportes = () => {
     if (activeTab === "anual") fetchResumenAnual();
   }, [activeTab, fetchReporteCortes, fetchReporteLimites, fetchResumenAnual]);
 
+  /* Manejo de Exportación a PDF */
+  const handleExportPDF = () => {
+    if (activeTab === "cortes" && reporteCortes) {
+      exportReporteCortesPDF(reporteCortes, anio);
+    } else if (activeTab === "limites" && reporteLimites) {
+      exportReporteLimitesPDF(reporteLimites);
+    } else if (activeTab === "anual" && resumenAnual) {
+      exportResumenAnualPDF(resumenAnual, anio);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Encabezado y selector de año */}
@@ -68,19 +84,32 @@ export const Reportes = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold">Año:</span>
-          <select
-            className="select select-bordered select-sm font-bold"
-            value={anio}
-            onChange={(e) => setAnio(Number(e.target.value))}
+        <div className="flex flex-wrap items-center gap-2">
+          {activeTab !== "limites" && (
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs font-semibold">Año:</span>
+              <select
+                className="select select-bordered select-sm font-bold"
+                value={anio}
+                onChange={(e) => setAnio(Number(e.target.value))}
+              >
+                {[2024, 2025, 2026, 2027].map((y) => (
+                  <option key={y} value={y}>
+                    {y}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          <button
+            onClick={handleExportPDF}
+            disabled={loading}
+            className="btn btn-primary btn-sm gap-2 shadow-sm"
+            title="Descargar este reporte en formato PDF"
           >
-            {[2024, 2025, 2026, 2027].map((y) => (
-              <option key={y} value={y}>
-                {y}
-              </option>
-            ))}
-          </select>
+            <Download className="w-4 h-4" /> Exportar PDF
+          </button>
         </div>
       </div>
 

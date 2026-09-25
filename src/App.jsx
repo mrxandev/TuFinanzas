@@ -56,13 +56,20 @@ export default function App() {
           >
             <Route index element={<Dashboard />} />
             <Route path="transacciones" element={<Transacciones />} />
-            <Route path="catalogos" element={<Catalogos />} />
             <Route path="cortes" element={<Cortes />} />
             <Route path="consultas" element={<Consultas />} />
             <Route path="reportes" element={<Reportes />} />
             <Route path="perfil" element={<Perfil />} />
 
-            {/* Ruta exclusiva para Administradores */}
+            {/* Rutas exclusivas para Administradores */}
+            <Route
+              path="catalogos"
+              element={
+                <ProtectedRoute adminOnly={true}>
+                  <Catalogos />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="usuarios"
               element={
