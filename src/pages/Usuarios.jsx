@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import api from "../services/api";
 import Swal from "sweetalert2";
-import { formatCurrency } from "../utils/formatters";
+import { formatCurrency, formatCedula, validarCedula } from "../utils/formatters";
 import { Plus, Edit, Trash2, Shield, Eye, AlertTriangle } from "lucide-react";
 
 export const Usuarios = () => {
@@ -70,7 +70,7 @@ export const Usuarios = () => {
   const openEditModal = (u) => {
     setEditingId(u.id);
     setFormData({
-      cedula: u.cedula || "",
+      cedula: formatCedula(u.cedula || ""),
       nombre: u.nombre || "",
       email: u.email || "",
       password: "",
@@ -87,6 +87,16 @@ export const Usuarios = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (submitting) return;
+
+    if (!editingId && !validarCedula(formData.cedula)) {
+      Swal.fire({
+        icon: "error",
+        title: "Cédula Inválida",
+        text: "El número de cédula ingresado no es válido según el algoritmo oficial dominicano. Por favor verifica los datos.",
+        confirmButtonColor: "#ef4444",
+      });
+      return;
+    }
 
     setSubmitting(true);
     try {
@@ -194,7 +204,7 @@ export const Usuarios = () => {
                 ) : (
                   safeUsuarios.map((u) => (
                     <tr key={u.id}>
-                      <td className="font-mono text-xs">{u.cedula}</td>
+                      <td className="font-mono text-xs">{formatCedula(u.cedula)}</td>
                       <td className="font-bold text-sm">{u.nombre}</td>
                       <td className="text-sm">{u.email}</td>
                       <td>
@@ -266,12 +276,26 @@ export const Usuarios = () => {
                   <input
                     type="text"
                     placeholder="001-0000000-0"
-                    className="input input-bordered input-sm"
+                    maxLength={13}
+                    inputMode="numeric"
+                    className={`input input-bordered input-sm font-mono ${
+                      !editingId && formData.cedula.replace(/\D/g, "").length === 11
+                        ? validarCedula(formData.cedula)
+                          ? "input-success"
+                          : "input-error"
+                        : ""
+                    }`}
                     value={formData.cedula}
-                    onChange={(e) => setFormData({ ...formData, cedula: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, cedula: formatCedula(e.target.value) })}
                     disabled={!!editingId || submitting}
                     required
                   />
+                  {!editingId && formData.cedula.replace(/\D/g, "").length === 11 && !validarCedula(formData.cedula) && (
+                    <span className="text-error text-xs mt-1">Cédula inválida</span>
+                  )}
+                  {!editingId && formData.cedula.replace(/\D/g, "").length === 11 && validarCedula(formData.cedula) && (
+                    <span className="text-success text-xs mt-1">Cédula válida</span>
+                  )}
                 </div>
                 <div className="form-control">
                   <label className="label py-1 text-xs font-semibold">Nombre Completo</label>

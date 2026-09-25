@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import { Wallet, LogIn, Mail, Lock } from "lucide-react";
+import { LogIn, Mail, Lock } from "lucide-react";
 
 export const Login = () => {
   const { login } = useAuth();
@@ -44,12 +44,9 @@ export const Login = () => {
 
   return (
     <div className="min-h-screen bg-base-200 flex items-center justify-center p-4">
-      <div className="card w-full max-w-md bg-base-100 shadow-xl border border-base-300">
+      <div className="card w-full max-w-md bg-base-100 shadow-sm border border-base-300">
         <div className="card-body p-8">
           <div className="text-center mb-6">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary mb-3">
-              <Wallet className="w-8 h-8" />
-            </div>
             <h1 className="text-2xl font-bold tracking-tight text-base-content">TuFinanzas</h1>
             <p className="text-sm text-base-content/60 mt-1">Gestión de Finanzas Personales</p>
           </div>

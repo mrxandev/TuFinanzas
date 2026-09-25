@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import { UserPlus, Wallet } from "lucide-react";
+import { UserPlus } from "lucide-react";
+import { formatCedula, validarCedula } from "../utils/formatters";
 
 export const Register = () => {
   const { register } = useAuth();
@@ -22,15 +23,32 @@ export const Register = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    let formattedValue = value;
+    if (name === "cedula") {
+      formattedValue = formatCedula(value);
+    } else if (name === "limite_egresos" || name === "fecha_corte") {
+      formattedValue = Number(value);
+    }
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "limite_egresos" || name === "fecha_corte" ? Number(value) : value,
+      [name]: formattedValue,
     }));
   };
 
   /* Envío de registro de nuevo usuario */
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validarCedula(formData.cedula)) {
+      Swal.fire({
+        icon: "error",
+        title: "Cédula Inválida",
+        text: "El número de cédula ingresado no es válido según el algoritmo oficial dominicano. Por favor verifica e intenta nuevamente.",
+        confirmButtonColor: "#ef4444",
+      });
+      return;
+    }
+
     setLoading(true);
     try {
       await register(formData);
@@ -38,7 +56,7 @@ export const Register = () => {
         icon: "success",
         title: "Registro Exitoso",
         text: "Tu cuenta ha sido creada. Ahora puedes iniciar sesión.",
-        confirmButtonColor: "#a78bfa",
+        confirmButtonColor: "#2563eb",
       });
       navigate("/login");
     } catch {
@@ -48,14 +66,15 @@ export const Register = () => {
     }
   };
 
+  const cedulaDigits = formData.cedula.replace(/\D/g, "");
+  const isCedulaComplete = cedulaDigits.length === 11;
+  const isCedulaValid = isCedulaComplete ? validarCedula(formData.cedula) : null;
+
   return (
     <div className="min-h-screen bg-base-200 flex items-center justify-center p-4">
-      <div className="card w-full max-w-lg bg-base-100 shadow-xl border border-base-300">
+      <div className="card w-full max-w-lg bg-base-100 shadow-sm border border-base-300">
         <div className="card-body p-8">
           <div className="text-center mb-4">
-            <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-primary/10 text-primary mb-2">
-              <Wallet className="w-7 h-7" />
-            </div>
             <h1 className="text-2xl font-bold tracking-tight text-base-content">Crear Cuenta</h1>
             <p className="text-sm text-base-content/60">Únete a TuFinanzas y controla tus gastos</p>
           </div>
@@ -70,11 +89,21 @@ export const Register = () => {
                   type="text"
                   name="cedula"
                   placeholder="001-0000000-0"
-                  className="input input-bordered input-sm w-full"
+                  maxLength={13}
+                  inputMode="numeric"
+                  className={`input input-bordered input-sm w-full font-mono ${
+                    isCedulaComplete ? (isCedulaValid ? "input-success" : "input-error") : ""
+                  }`}
                   value={formData.cedula}
                   onChange={handleChange}
                   required
                 />
+                {isCedulaComplete && !isCedulaValid && (
+                  <span className="text-error text-xs mt-1">Cédula dominicana inválida</span>
+                )}
+                {isCedulaComplete && isCedulaValid && (
+                  <span className="text-success text-xs mt-1">Cédula válida</span>
+                )}
               </div>
 
               <div className="form-control">

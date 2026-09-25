@@ -184,7 +184,7 @@ export const Transacciones = () => {
                 <p><strong>Exceso:</strong> ${formatCurrency(warning.exceso)} (${warning.porcentaje_consumido}%)</p>
               </div>
             `,
-            confirmButtonColor: "#a78bfa",
+            confirmButtonColor: "#2563eb",
           });
         } else {
           Swal.fire("Registrada", "Transacción registrada exitosamente.", "success");

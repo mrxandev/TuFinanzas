@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import api from "../services/api";
 import Swal from "sweetalert2";
 import { User, Key, Save } from "lucide-react";
+import { formatCedula } from "../utils/formatters";
 
 export const Perfil = () => {
   const { user, updateUserData } = useAuth();
@@ -103,8 +104,8 @@ export const Perfil = () => {
                 <label className="label py-1 text-xs font-semibold">Cédula</label>
                 <input
                   type="text"
-                  className="input input-bordered input-sm bg-base-200"
-                  value={user?.cedula || ""}
+                  className="input input-bordered input-sm bg-base-200 font-mono"
+                  value={formatCedula(user?.cedula || "")}
                   disabled
                 />
               </div>

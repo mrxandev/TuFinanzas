@@ -54,7 +54,7 @@ export const Cortes = () => {
       text: `Se calcularán balances acumulados y cierre contable para ${procesarForm.mes}/${procesarForm.anio}.`,
       icon: "question",
       showCancelButton: true,
-      confirmButtonColor: "#a78bfa",
+      confirmButtonColor: "#2563eb",
       confirmButtonText: "Sí, procesar",
     });
 
