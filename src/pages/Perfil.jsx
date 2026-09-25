@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import api from "../services/api";
 import Swal from "sweetalert2";
-import { User, Key, Save } from "lucide-react";
+import { User, Key, Save, Lock, Mail, CreditCard, Calendar, ShieldCheck, Briefcase } from "lucide-react";
 import { formatCedula } from "../utils/formatters";
 
 export const Perfil = () => {
@@ -48,7 +48,7 @@ export const Perfil = () => {
         showConfirmButton: false,
       });
     } catch {
-      // Interceptor
+      // Manejado en interceptor
     } finally {
       setLoadingProfile(false);
     }
@@ -76,142 +76,237 @@ export const Perfil = () => {
       });
       setPasswordForm({ password_actual: "", password_nueva: "" });
     } catch {
-      // Interceptor
+      // Manejado en interceptor
     } finally {
       setLoadingPassword(false);
     }
   };
 
   return (
-    <div className="space-y-6 max-w-4xl mx-auto">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Mi Perfil</h1>
-        <p className="text-sm text-base-content/60">
-          Gestiona tu información personal, límites y credenciales de acceso.
-        </p>
+    <div className="w-full max-w-7xl mx-auto space-y-8 pb-10">
+      {/* Encabezado Principal */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-base-200">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-base-content flex items-center gap-3">
+            <div className="p-2.5 rounded-2xl bg-[#a78bfa]/10 text-[#a78bfa]">
+              <User className="w-7 h-7" />
+            </div>
+            Mi Perfil
+          </h1>
+          <p className="text-sm text-base-content/70 mt-1">
+            Gestiona tu información personal, parámetros de corte financiero y credenciales de acceso.
+          </p>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Formulario de Información de Perfil */}
-        <div className="card bg-base-100 shadow-sm border border-base-300">
-          <div className="card-body p-6">
-            <h2 className="font-bold text-lg mb-4 flex items-center gap-2">
-              <User className="w-5 h-5 text-primary" /> Datos Personales
-            </h2>
+      {/* Grid Responsivo Amplio */}
+      <div className="max-w-4xl">
+        {/* Tarjeta de Datos Personales */}
+        <div className="card bg-base-100 border border-base-200 shadow-sm rounded-2xl">
+          <div className="card-body p-6 sm:p-8 space-y-6">
+            <div className="flex items-center justify-between border-b border-base-200 pb-4">
+              <h2 className="font-bold text-xl text-base-content flex items-center gap-3">
+                <User className="w-5 h-5 text-[#a78bfa]" /> Datos Personales
+              </h2>
+              <span className="text-xs text-base-content/50 font-medium">Información de la Cuenta</span>
+            </div>
 
-            <form onSubmit={handleUpdateProfile} className="space-y-3">
-              <div className="form-control">
-                <label className="label py-1 text-xs font-semibold">Cédula</label>
-                <input
-                  type="text"
-                  className="input input-bordered input-sm bg-base-200 font-mono"
-                  value={formatCedula(user?.cedula || "")}
-                  disabled
-                />
-              </div>
-
-              <div className="form-control">
-                <label className="label py-1 text-xs font-semibold">Correo Electrónico</label>
-                <input
-                  type="email"
-                  className="input input-bordered input-sm bg-base-200"
-                  value={user?.email || ""}
-                  disabled
-                />
-              </div>
-
-              <div className="form-control">
-                <label className="label py-1 text-xs font-semibold">Nombre Completo</label>
-                <input
-                  type="text"
-                  className="input input-bordered input-sm"
-                  value={profileForm.nombre}
-                  onChange={(e) => setProfileForm({ ...profileForm, nombre: e.target.value })}
-                  required
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
+            <form onSubmit={handleUpdateProfile} className="space-y-6">
+              {/* Fila 1: Cédula y Correo (Solo Lectura) */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="form-control">
-                  <label className="label py-1 text-xs font-semibold">Límite Egresos (RD$)</label>
-                  <input
-                    type="number"
-                    className="input input-bordered input-sm"
-                    value={profileForm.limite_egresos}
-                    onChange={(e) => setProfileForm({ ...profileForm, limite_egresos: e.target.value })}
-                    required
-                  />
+                  <label className="label py-1 text-xs font-semibold uppercase tracking-wider text-base-content/70 flex items-center justify-between">
+                    <span>Cédula / Identificación</span>
+                    <Lock className="w-3.5 h-3.5 text-base-content/40" />
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      className="input input-bordered input-md w-full bg-base-200/60 font-mono text-sm text-base-content/80 cursor-not-allowed pl-10 rounded-xl"
+                      value={formatCedula(user?.cedula || "")}
+                      disabled
+                    />
+                    <CreditCard className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-base-content/40" />
+                  </div>
                 </div>
 
                 <div className="form-control">
-                  <label className="label py-1 text-xs font-semibold">Día de Corte Mensual</label>
-                  <input
-                    type="number"
-                    min="1"
-                    max="31"
-                    className="input input-bordered input-sm"
-                    value={profileForm.fecha_corte}
-                    onChange={(e) => setProfileForm({ ...profileForm, fecha_corte: e.target.value })}
-                    required
-                  />
+                  <label className="label py-1 text-xs font-semibold uppercase tracking-wider text-base-content/70 flex items-center justify-between">
+                    <span>Correo Electrónico</span>
+                    <Lock className="w-3.5 h-3.5 text-base-content/40" />
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="email"
+                      className="input input-bordered input-md w-full bg-base-200/60 text-sm text-base-content/80 cursor-not-allowed pl-10 rounded-xl"
+                      value={user?.email || ""}
+                      disabled
+                    />
+                    <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-base-content/40" />
+                  </div>
                 </div>
               </div>
 
-              <button
-                type="submit"
-                disabled={loadingProfile}
-                className="btn btn-primary btn-sm w-full mt-4 flex items-center justify-center gap-2"
-              >
-                {loadingProfile ? <span className="loading loading-spinner"></span> : <Save className="w-4 h-4" />}
-                Guardar Cambios
-              </button>
+              {/* Fila 2: Nombre Completo y Tipo Persona */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="form-control">
+                  <label className="label py-1 text-xs font-semibold uppercase tracking-wider text-base-content/70">
+                    Nombre Completo
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      className="input input-bordered input-md w-full text-sm pl-10 rounded-xl"
+                      value={profileForm.nombre}
+                      onChange={(e) => setProfileForm({ ...profileForm, nombre: e.target.value })}
+                      required
+                    />
+                    <User className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-base-content/40" />
+                  </div>
+                </div>
+
+                <div className="form-control">
+                  <label className="label py-1 text-xs font-semibold uppercase tracking-wider text-base-content/70">
+                    Tipo de Persona
+                  </label>
+                  <div className="relative">
+                    <select
+                      className="select select-bordered select-md w-full text-sm pl-10 rounded-xl"
+                      value={profileForm.tipo_persona}
+                      onChange={(e) => setProfileForm({ ...profileForm, tipo_persona: e.target.value })}
+                    >
+                      <option value="FISICA">Física (Individual)</option>
+                      <option value="JURIDICA">Jurídica (Empresa / RNC)</option>
+                    </select>
+                    <Briefcase className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-base-content/40" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Fila 3: Límite Egresos y Día de Corte */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="form-control">
+                  <label className="label py-1 text-xs font-semibold uppercase tracking-wider text-base-content/70">
+                    Límite Mensual de Egresos
+                  </label>
+                  <div className="join w-full">
+                    <span className="join-item btn btn-md btn-neutral no-animation font-bold text-xs px-4 rounded-l-xl">
+                      RD$
+                    </span>
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      className="join-item input input-bordered input-md w-full text-sm font-semibold rounded-r-xl"
+                      value={profileForm.limite_egresos}
+                      onChange={(e) => setProfileForm({ ...profileForm, limite_egresos: e.target.value })}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="form-control">
+                  <label className="label py-1 text-xs font-semibold uppercase tracking-wider text-base-content/70">
+                    Día de Corte Mensual (1 a 31)
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      min="1"
+                      max="31"
+                      className="input input-bordered input-md w-full text-sm pl-10 font-semibold rounded-xl"
+                      value={profileForm.fecha_corte}
+                      onChange={(e) => setProfileForm({ ...profileForm, fecha_corte: e.target.value })}
+                      required
+                    />
+                    <Calendar className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-base-content/40" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Botón de Envio */}
+              <div className="flex justify-end pt-4 border-t border-base-200">
+                <button
+                  type="submit"
+                  disabled={loadingProfile}
+                  className="btn btn-primary px-8 h-11 rounded-xl font-semibold gap-2 shadow-sm"
+                >
+                  {loadingProfile ? (
+                    <span className="loading loading-spinner loading-sm"></span>
+                  ) : (
+                    <Save className="w-4 h-4" />
+                  )}
+                  Guardar Datos Personales
+                </button>
+              </div>
             </form>
           </div>
         </div>
 
-        {/* Formulario de Cambio de Contraseña */}
-        <div className="card bg-base-100 shadow-sm border border-base-300">
-          <div className="card-body p-6">
-            <h2 className="font-bold text-lg mb-4 flex items-center gap-2">
-              <Key className="w-5 h-5 text-secondary" /> Cambiar Contraseña
-            </h2>
-
-            <form onSubmit={handleChangePassword} className="space-y-4">
-              <div className="form-control">
-                <label className="label py-1 text-xs font-semibold">Contraseña Actual</label>
-                <input
-                  type="password"
-                  placeholder="••••••••"
-                  className="input input-bordered input-sm"
-                  value={passwordForm.password_actual}
-                  onChange={(e) => setPasswordForm({ ...passwordForm, password_actual: e.target.value })}
-                  required
-                />
+        {/* Tarjeta de Cambio de Contraseña (Oculta visualmente en la UI, lógica preservada) */}
+        {false && (
+          <div className="card bg-base-100 border border-base-200 shadow-sm rounded-2xl">
+            <div className="card-body p-6 sm:p-8 space-y-6">
+              <div className="flex items-center justify-between border-b border-base-200 pb-4">
+                <h2 className="font-bold text-xl text-base-content flex items-center gap-3">
+                  <Key className="w-5 h-5 text-[#a78bfa]" /> Seguridad
+                </h2>
+                <ShieldCheck className="w-5 h-5 text-emerald-500" />
               </div>
 
-              <div className="form-control">
-                <label className="label py-1 text-xs font-semibold">Nueva Contraseña</label>
-                <input
-                  type="password"
-                  placeholder="••••••••"
-                  className="input input-bordered input-sm"
-                  value={passwordForm.password_nueva}
-                  onChange={(e) => setPasswordForm({ ...passwordForm, password_nueva: e.target.value })}
-                  required
-                />
-              </div>
+              <form onSubmit={handleChangePassword} className="space-y-5">
+                <div className="form-control">
+                  <label className="label py-1 text-xs font-semibold uppercase tracking-wider text-base-content/70">
+                    Contraseña Actual
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="password"
+                      placeholder="••••••••"
+                      className="input input-bordered input-md w-full text-sm pl-10 rounded-xl"
+                      value={passwordForm.password_actual}
+                      onChange={(e) => setPasswordForm({ ...passwordForm, password_actual: e.target.value })}
+                      required
+                    />
+                    <Key className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-base-content/40" />
+                  </div>
+                </div>
 
-              <button
-                type="submit"
-                disabled={loadingPassword}
-                className="btn btn-secondary btn-sm w-full mt-4 flex items-center justify-center gap-2"
-              >
-                {loadingPassword ? <span className="loading loading-spinner"></span> : <Key className="w-4 h-4" />}
-                Actualizar Contraseña
-              </button>
-            </form>
+                <div className="form-control">
+                  <label className="label py-1 text-xs font-semibold uppercase tracking-wider text-base-content/70">
+                    Nueva Contraseña
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="password"
+                      placeholder="••••••••"
+                      className="input input-bordered input-md w-full text-sm pl-10 rounded-xl"
+                      value={passwordForm.password_nueva}
+                      onChange={(e) => setPasswordForm({ ...passwordForm, password_nueva: e.target.value })}
+                      required
+                    />
+                    <ShieldCheck className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-base-content/40" />
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-base-200">
+                  <button
+                    type="submit"
+                    disabled={loadingPassword}
+                    className="btn btn-primary w-full h-11 rounded-xl font-semibold gap-2 shadow-sm"
+                  >
+                    {loadingPassword ? (
+                      <span className="loading loading-spinner loading-sm"></span>
+                    ) : (
+                      <Key className="w-4 h-4" />
+                    )}
+                    Actualizar Contraseña
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { UserPlus } from "lucide-react";
 import { formatCedula, validarCedula } from "../utils/formatters";
+import { ThemeSelector } from "../components/ThemeSelector";
 
 export const Register = () => {
   const { register } = useAuth();
@@ -71,7 +72,10 @@ export const Register = () => {
   const isCedulaValid = isCedulaComplete ? validarCedula(formData.cedula) : null;
 
   return (
-    <div className="min-h-screen bg-base-200 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-base-200 flex items-center justify-center p-4 relative">
+      <div className="absolute top-4 right-4">
+        <ThemeSelector />
+      </div>
       <div className="card w-full max-w-lg bg-base-100 shadow-sm border border-base-300">
         <div className="card-body p-8">
           <div className="text-center mb-4">

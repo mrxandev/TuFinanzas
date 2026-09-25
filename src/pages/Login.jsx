@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { LogIn, Mail, Lock } from "lucide-react";
+import { ThemeSelector } from "../components/ThemeSelector";
 
 export const Login = () => {
   const { login } = useAuth();
@@ -43,7 +44,10 @@ export const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-base-200 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-base-200 flex items-center justify-center p-4 relative">
+      <div className="absolute top-4 right-4">
+        <ThemeSelector />
+      </div>
       <div className="card w-full max-w-md bg-base-100 shadow-sm border border-base-300">
         <div className="card-body p-8">
           <div className="text-center mb-6">

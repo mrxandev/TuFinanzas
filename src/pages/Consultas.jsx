@@ -346,7 +346,7 @@ export const Consultas = () => {
                       <td>
                         <span
                           className={`badge badge-sm ${
-                            t.tipo_transaccion === "INGRESO" ? "badge-success text-white" : "badge-error text-white"
+                            t.tipo_transaccion === "INGRESO" ? "badge-success text-success-content" : "badge-error text-error-content"
                           }`}
                         >
                           {t.tipo_transaccion}

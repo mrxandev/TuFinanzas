@@ -89,7 +89,7 @@ export const Dashboard = () => {
 
       {/* Alerta Destacada si superó el límite mensual */}
       {limiteInfo?.supero_limite && (
-        <div className="alert alert-error shadow-md text-white">
+        <div className="alert alert-error shadow-md text-error-content">
           <AlertTriangle className="w-6 h-6 shrink-0" />
           <div>
             <h3 className="font-bold text-lg">Alerta de Límite de Egresos Excedido</h3>
@@ -244,7 +244,7 @@ export const Dashboard = () => {
                       <td>
                         <span
                           className={`badge badge-sm font-semibold ${
-                            t.tipo_transaccion === "INGRESO" ? "badge-success text-white" : "badge-error text-white"
+                            t.tipo_transaccion === "INGRESO" ? "badge-success text-success-content" : "badge-error text-error-content"
                           }`}
                         >
                           {t.tipo_transaccion}

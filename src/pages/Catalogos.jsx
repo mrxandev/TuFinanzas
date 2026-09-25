@@ -247,7 +247,7 @@ export const Catalogos = () => {
                       <td>
                         <span
                           className={`badge badge-sm ${
-                            item.estado === "ACTIVO" ? "badge-success text-white" : "badge-ghost"
+                            item.estado === "ACTIVO" ? "badge-success text-success-content" : "badge-ghost"
                           }`}
                         >
                           {item.estado}

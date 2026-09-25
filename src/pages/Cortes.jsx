@@ -171,11 +171,11 @@ export const Cortes = () => {
                       </td>
                       <td>
                         {c.supero_limite ? (
-                          <span className="badge badge-error text-white gap-1 font-semibold">
+                          <span className="badge badge-error text-error-content gap-1 font-semibold">
                             <AlertTriangle className="w-3 h-3" /> Excedido
                           </span>
                         ) : (
-                          <span className="badge badge-success text-white gap-1 font-semibold">
+                          <span className="badge badge-success text-success-content gap-1 font-semibold">
                             <CheckCircle2 className="w-3 h-3" /> Ok
                           </span>
                         )}
@@ -333,7 +333,7 @@ export const Cortes = () => {
                         <td>
                           <span
                             className={`badge badge-xs ${
-                              t.tipo_transaccion === "INGRESO" ? "badge-success text-white" : "badge-error text-white"
+                              t.tipo_transaccion === "INGRESO" ? "badge-success text-success-content" : "badge-error text-error-content"
                             }`}
                           >
                             {t.tipo_transaccion}

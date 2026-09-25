@@ -117,19 +117,19 @@ export const Reportes = () => {
       <div className="tabs tabs-boxed bg-base-100 p-2 border border-base-300">
         <button
           onClick={() => setActiveTab("cortes")}
-          className={`tab tab-md gap-2 ${activeTab === "cortes" ? "tab-active bg-primary text-white font-bold" : ""}`}
+          className={`tab tab-md gap-2 ${activeTab === "cortes" ? "tab-active bg-primary text-primary-content font-bold" : ""}`}
         >
           <BarChart3 className="w-4 h-4" /> Cortes Consolidados
         </button>
         <button
           onClick={() => setActiveTab("limites")}
-          className={`tab tab-md gap-2 ${activeTab === "limites" ? "tab-active bg-primary text-white font-bold" : ""}`}
+          className={`tab tab-md gap-2 ${activeTab === "limites" ? "tab-active bg-primary text-primary-content font-bold" : ""}`}
         >
           <ShieldAlert className="w-4 h-4" /> Cumplimiento de Límites
         </button>
         <button
           onClick={() => setActiveTab("anual")}
-          className={`tab tab-md gap-2 ${activeTab === "anual" ? "tab-active bg-primary text-white font-bold" : ""}`}
+          className={`tab tab-md gap-2 ${activeTab === "anual" ? "tab-active bg-primary text-primary-content font-bold" : ""}`}
         >
           <Calendar className="w-4 h-4" /> Resumen Evolución Anual
         </button>
@@ -207,7 +207,7 @@ export const Reportes = () => {
                               {formatCurrency(c.balance_al_corte)}
                             </td>
                             <td>
-                              <span className={`badge badge-sm ${c.supero_limite ? "badge-error text-white" : "badge-success text-white"}`}>
+                              <span className={`badge badge-sm ${c.supero_limite ? "badge-error text-error-content" : "badge-success text-success-content"}`}>
                                 {c.supero_limite ? "SÍ" : "NO"}
                               </span>
                             </td>
@@ -279,7 +279,7 @@ export const Reportes = () => {
                                 <span className="text-xs ml-2 font-bold">{h.porcentaje_consumido}%</span>
                               </td>
                               <td>
-                                <span className={`badge badge-sm ${h.supero_limite ? "badge-error text-white" : "badge-success text-white"}`}>
+                                <span className={`badge badge-sm ${h.supero_limite ? "badge-error text-error-content" : "badge-success text-success-content"}`}>
                                   {h.supero_limite ? "Excedido" : "Cumplido"}
                                 </span>
                               </td>

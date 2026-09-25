@@ -220,10 +220,10 @@ export const Usuarios = () => {
                         <span
                           className={`badge badge-sm ${
                             u.estado === "ACTIVO"
-                              ? "badge-success text-white"
+                              ? "badge-success text-success-content"
                               : u.estado === "INACTIVO"
                               ? "badge-ghost"
-                              : "badge-error text-white"
+                              : "badge-error text-error-content"
                           }`}
                         >
                           {u.estado}
