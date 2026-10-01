@@ -3,21 +3,23 @@ import { createContext, useContext, useEffect, useState } from "react";
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const [theme] = useState("dark");
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem("daisyui-theme") || "dark";
+  });
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", "dark");
-    localStorage.setItem("daisyui-theme", "dark");
-  }, []);
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("daisyui-theme", theme);
+  }, [theme]);
 
-  const changeTheme = () => {
-    // Modo estrictamente oscuro
-    document.documentElement.setAttribute("data-theme", "dark");
-    localStorage.setItem("daisyui-theme", "dark");
+  const changeTheme = (newTheme) => {
+    setTheme(newTheme);
+    document.documentElement.setAttribute("data-theme", newTheme);
+    localStorage.setItem("daisyui-theme", newTheme);
   };
 
   return (
-    <ThemeContext.Provider value={{ theme: "dark", changeTheme, themes: ["dark"] }}>
+    <ThemeContext.Provider value={{ theme, changeTheme, themes: ["dark"] }}>
       {children}
     </ThemeContext.Provider>
   );

@@ -11,7 +11,7 @@ import {
   User,
 } from "lucide-react";
 
-export const Sidebar = ({ isMinimized }) => {
+export const Sidebar = ({ isMinimized, onLinkClick }) => {
   const { isAdmin } = useAuth();
 
   const menuItems = [
@@ -44,6 +44,9 @@ export const Sidebar = ({ isMinimized }) => {
               <li key={item.path} className="group relative flex justify-center">
                 <NavLink
                   to={item.path}
+                  onClick={() => {
+                    if (onLinkClick) onLinkClick();
+                  }}
                   className={({ isActive }) =>
                     `flex items-center justify-center w-12 h-12 rounded-xl transition-all ${
                       isActive
@@ -60,8 +63,7 @@ export const Sidebar = ({ isMinimized }) => {
                   {/* Left-pointing triangle connector ("palomita") */}
                   <div className="w-0 h-0 border-y-[6px] border-y-transparent border-r-[8px] border-r-base-200 drop-shadow-sm"></div>
                   {/* Badge content */}
-                  <div className="bg-base-200 text-base-content text-xs font-semibold px-3 py-1.5 rounded-xl shadow-xl border border-base-300 whitespace-nowrap flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                  <div className="bg-base-200 text-base-content text-xs font-semibold px-3 py-1.5 rounded-xl shadow-xl border border-base-300 whitespace-nowrap flex items-center">
                     {item.label}
                   </div>
                 </div>
@@ -73,6 +75,9 @@ export const Sidebar = ({ isMinimized }) => {
             <li key={item.path}>
               <NavLink
                 to={item.path}
+                onClick={() => {
+                  if (onLinkClick) onLinkClick();
+                }}
                 className={({ isActive }) =>
                   `flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors ${
                     isActive
