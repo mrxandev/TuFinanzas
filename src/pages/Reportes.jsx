@@ -1,7 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import api from "../services/api";
 import { formatCurrency, formatDate } from "../utils/formatters";
-import { BarChart3, ShieldAlert, Calendar } from "lucide-react";
+import { BarChart3, ShieldAlert, Calendar, Download } from "lucide-react";
+import {
+  exportReporteCortesPDF,
+  exportReporteLimitesPDF,
+  exportResumenAnualPDF,
+} from "../utils/pdfExport";
 
 export const Reportes = () => {
   const [activeTab, setActiveTab] = useState("cortes");
@@ -57,6 +62,20 @@ export const Reportes = () => {
     if (activeTab === "anual") fetchResumenAnual();
   }, [activeTab, fetchReporteCortes, fetchReporteLimites, fetchResumenAnual]);
 
+  /* Manejo de Exportación a PDF */
+  const handleExportPDF = () => {
+    if (activeTab === "cortes" && reporteCortes) {
+      exportReporteCortesPDF(reporteCortes, anio);
+    } else if (activeTab === "limites" && reporteLimites) {
+      exportReporteLimitesPDF(reporteLimites);
+    } else if (activeTab === "anual" && resumenAnual) {
+      exportResumenAnualPDF(resumenAnual, anio);
+    }
+  };
+
+  const resumenCortes = reporteCortes?.resumen || reporteCortes?.totales_consolidados || {};
+  const statsLimites = reporteLimites?.estadisticas || {};
+
   return (
     <div className="space-y-6">
       {/* Encabezado y selector de año */}
@@ -68,19 +87,32 @@ export const Reportes = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold">Año:</span>
-          <select
-            className="select select-bordered select-sm font-bold"
-            value={anio}
-            onChange={(e) => setAnio(Number(e.target.value))}
+        <div className="flex flex-wrap items-center gap-2">
+          {activeTab !== "limites" && (
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs font-semibold">Año:</span>
+              <select
+                className="select select-bordered select-sm font-bold"
+                value={anio}
+                onChange={(e) => setAnio(Number(e.target.value))}
+              >
+                {[2024, 2025, 2026, 2027].map((y) => (
+                  <option key={y} value={y}>
+                    {y}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          <button
+            onClick={handleExportPDF}
+            disabled={loading}
+            className="btn btn-primary btn-sm gap-2"
+            title="Descargar este reporte en formato PDF"
           >
-            {[2024, 2025, 2026, 2027].map((y) => (
-              <option key={y} value={y}>
-                {y}
-              </option>
-            ))}
-          </select>
+            <Download className="w-4 h-4" /> Exportar PDF
+          </button>
         </div>
       </div>
 
@@ -88,19 +120,19 @@ export const Reportes = () => {
       <div className="tabs tabs-boxed bg-base-100 p-2 border border-base-300">
         <button
           onClick={() => setActiveTab("cortes")}
-          className={`tab tab-md gap-2 ${activeTab === "cortes" ? "tab-active bg-primary text-white font-bold" : ""}`}
+          className={`tab tab-md gap-2 ${activeTab === "cortes" ? "tab-active bg-primary text-primary-content font-bold" : ""}`}
         >
           <BarChart3 className="w-4 h-4" /> Cortes Consolidados
         </button>
         <button
           onClick={() => setActiveTab("limites")}
-          className={`tab tab-md gap-2 ${activeTab === "limites" ? "tab-active bg-primary text-white font-bold" : ""}`}
+          className={`tab tab-md gap-2 ${activeTab === "limites" ? "tab-active bg-primary text-primary-content font-bold" : ""}`}
         >
           <ShieldAlert className="w-4 h-4" /> Cumplimiento de Límites
         </button>
         <button
           onClick={() => setActiveTab("anual")}
-          className={`tab tab-md gap-2 ${activeTab === "anual" ? "tab-active bg-primary text-white font-bold" : ""}`}
+          className={`tab tab-md gap-2 ${activeTab === "anual" ? "tab-active bg-primary text-primary-content font-bold" : ""}`}
         >
           <Calendar className="w-4 h-4" /> Resumen Evolución Anual
         </button>
@@ -119,24 +151,26 @@ export const Reportes = () => {
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="stat bg-base-100 border border-base-200 rounded-box">
                   <div className="stat-title text-xs">Total Cortes</div>
-                  <div className="stat-value text-lg font-bold">{reporteCortes.resumen?.total_cortes || 0}</div>
+                  <div className="stat-value text-lg font-bold">
+                    {resumenCortes.total_cortes ?? resumenCortes.total_periodos_cerrados ?? 0}
+                  </div>
                 </div>
                 <div className="stat bg-base-100 border border-base-200 rounded-box">
                   <div className="stat-title text-xs">Total Ingresos Anuales</div>
                   <div className="stat-value text-lg font-bold text-success">
-                    {formatCurrency(reporteCortes.resumen?.total_ingresos)}
+                    {formatCurrency(resumenCortes.total_ingresos)}
                   </div>
                 </div>
                 <div className="stat bg-base-100 border border-base-200 rounded-box">
                   <div className="stat-title text-xs">Total Egresos Anuales</div>
                   <div className="stat-value text-lg font-bold text-error">
-                    {formatCurrency(reporteCortes.resumen?.total_egresos)}
+                    {formatCurrency(resumenCortes.total_egresos)}
                   </div>
                 </div>
                 <div className="stat bg-base-100 border border-base-200 rounded-box">
                   <div className="stat-title text-xs">Cortes Excedidos</div>
                   <div className="stat-value text-lg font-bold text-warning">
-                    {reporteCortes.resumen?.cortes_superaron_limite || 0}
+                    {resumenCortes.cortes_superaron_limite ?? resumenCortes.meses_supero_limite ?? 0}
                   </div>
                 </div>
               </div>
@@ -156,14 +190,14 @@ export const Reportes = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {reporteCortes.cortes?.length === 0 ? (
+                      {!reporteCortes.cortes || reporteCortes.cortes.length === 0 ? (
                         <tr>
                           <td colSpan="7" className="text-center py-6 text-base-content/50">
                             No hay cortes registrados para el año {anio}.
                           </td>
                         </tr>
                       ) : (
-                        reporteCortes.cortes?.map((c) => (
+                        reporteCortes.cortes.map((c) => (
                           <tr key={c.id}>
                             <td className="font-bold">Mes {c.mes}</td>
                             <td>{formatDate(c.fecha_corte)}</td>
@@ -178,7 +212,7 @@ export const Reportes = () => {
                               {formatCurrency(c.balance_al_corte)}
                             </td>
                             <td>
-                              <span className={`badge badge-sm ${c.supero_limite ? "badge-error text-white" : "badge-success text-white"}`}>
+                              <span className={`font-semibold text-xs ${c.supero_limite ? "text-error" : "text-success"}`}>
                                 {c.supero_limite ? "SÍ" : "NO"}
                               </span>
                             </td>
@@ -198,18 +232,20 @@ export const Reportes = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="stat bg-base-100 border border-base-200 rounded-box">
                   <div className="stat-title text-xs">Total Evaluaciones</div>
-                  <div className="stat-value text-xl font-bold">{reporteLimites.estadisticas?.total_evaluaciones || 0}</div>
+                  <div className="stat-value text-xl font-bold">
+                    {statsLimites.total_evaluaciones ?? 0}
+                  </div>
                 </div>
                 <div className="stat bg-base-100 border border-base-200 rounded-box">
                   <div className="stat-title text-xs">Periodos en Regla</div>
                   <div className="stat-value text-xl font-bold text-success">
-                    {reporteLimites.estadisticas?.periodos_en_regla || 0}
+                    {statsLimites.periodos_en_regla ?? 0}
                   </div>
                 </div>
                 <div className="stat bg-base-100 border border-base-200 rounded-box">
                   <div className="stat-title text-xs">Periodos Excedidos</div>
                   <div className="stat-value text-xl font-bold text-error">
-                    {reporteLimites.estadisticas?.periodos_excedidos || 0}
+                    {statsLimites.periodos_excedidos ?? 0}
                   </div>
                 </div>
               </div>
@@ -229,15 +265,15 @@ export const Reportes = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {reporteLimites.historial?.length === 0 ? (
+                        {!reporteLimites.historial || reporteLimites.historial.length === 0 ? (
                           <tr>
                             <td colSpan="5" className="text-center py-6 text-base-content/50">
                               No hay historial de cumplimiento disponible.
                             </td>
                           </tr>
                         ) : (
-                          reporteLimites.historial?.map((h, i) => (
-                            <tr key={i}>
+                          reporteLimites.historial.map((h, i) => (
+                            <tr key={h.id || i}>
                               <td className="font-mono font-semibold">{h.anio} - Mes {h.mes}</td>
                               <td>{formatCurrency(h.limite_egresos_periodo)}</td>
                               <td className="font-bold">{formatCurrency(h.total_egresos)}</td>
@@ -250,7 +286,7 @@ export const Reportes = () => {
                                 <span className="text-xs ml-2 font-bold">{h.porcentaje_consumido}%</span>
                               </td>
                               <td>
-                                <span className={`badge badge-sm ${h.supero_limite ? "badge-error text-white" : "badge-success text-white"}`}>
+                                <span className={`font-semibold text-xs ${h.supero_limite ? "text-error" : "text-success"}`}>
                                   {h.supero_limite ? "Excedido" : "Cumplido"}
                                 </span>
                               </td>
@@ -282,28 +318,34 @@ export const Reportes = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {resumenAnual.meses?.map((m) => (
-                        <tr key={m.mes}>
-                          <td className="font-bold">Mes {m.mes} ({m.nombre_mes})</td>
-                          <td className="text-success font-semibold">
-                            {formatCurrency(m.ingresos)}
-                          </td>
-                          <td className="text-error font-semibold">
-                            {formatCurrency(m.egresos)}
-                          </td>
-                          <td className={`font-bold ${m.balance >= 0 ? "text-primary" : "text-error"}`}>
-                            {formatCurrency(m.balance)}
-                          </td>
-                          <td>
-                            <div className="w-full bg-base-200 rounded-full h-2.5 max-w-xs">
-                              <div
-                                className={`h-2.5 rounded-full ${m.balance >= 0 ? "bg-primary" : "bg-error"}`}
-                                style={{ width: `${Math.min(Math.abs(m.balance) / 500, 100)}%` }}
-                              ></div>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
+                      {resumenAnual.meses?.map((m) => {
+                        const ing = m.ingresos ?? m.total_ingresos ?? 0;
+                        const egr = m.egresos ?? m.total_egresos ?? 0;
+                        const bal = m.balance ?? m.balance_al_corte ?? 0;
+
+                        return (
+                          <tr key={m.mes}>
+                            <td className="font-bold">Mes {m.mes} ({m.nombre_mes})</td>
+                            <td className="text-success font-semibold">
+                              {formatCurrency(ing)}
+                            </td>
+                            <td className="text-error font-semibold">
+                              {formatCurrency(egr)}
+                            </td>
+                            <td className={`font-bold ${bal >= 0 ? "text-primary" : "text-error"}`}>
+                              {formatCurrency(bal)}
+                            </td>
+                            <td>
+                              <div className="w-full bg-base-200 rounded-full h-2.5 max-w-xs">
+                                <div
+                                  className={`h-2.5 rounded-full ${bal >= 0 ? "bg-primary" : "bg-error"}`}
+                                  style={{ width: `${Math.min(Math.abs(bal) / 5000, 100)}%` }}
+                                ></div>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>

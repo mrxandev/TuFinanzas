@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import api from "../services/api";
 import { formatCurrency, formatDate } from "../utils/formatters";
-import { Search, Filter, RefreshCw, TrendingUp, TrendingDown, DollarSign, ListFilter } from "lucide-react";
+import { Search, Filter, RefreshCw, TrendingUp, TrendingDown, DollarSign, ListFilter, Download } from "lucide-react";
+import { exportConsultaPDF } from "../utils/pdfExport";
 
 export const Consultas = () => {
   const [transacciones, setTransacciones] = useState([]);
@@ -102,14 +103,30 @@ export const Consultas = () => {
     });
   };
 
+  /* Exportar a PDF */
+  const handleExportPDF = () => {
+    exportConsultaPDF(transacciones, resumen, query);
+  };
+
   return (
     <div className="space-y-6">
       {/* Encabezado */}
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Consulta Multidimensional</h1>
-        <p className="text-sm text-base-content/60">
-          Filtra y analiza transacciones cruzando múltiples criterios financieros.
-        </p>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Consulta Multidimensional</h1>
+          <p className="text-sm text-base-content/60">
+            Filtra y analiza transacciones cruzando múltiples criterios financieros.
+          </p>
+        </div>
+
+        <button
+          onClick={handleExportPDF}
+          disabled={loading || transacciones.length === 0}
+          className="btn btn-primary btn-sm gap-2"
+          title="Exportar los resultados de la consulta a PDF"
+        >
+          <Download className="w-4 h-4" /> Exportar PDF
+        </button>
       </div>
 
       {/* Formulario de Búsqueda Multicriterio */}
@@ -328,8 +345,8 @@ export const Consultas = () => {
                       <td className="font-mono text-xs font-semibold">{t.numero_transaccion}</td>
                       <td>
                         <span
-                          className={`badge badge-sm ${
-                            t.tipo_transaccion === "INGRESO" ? "badge-success text-white" : "badge-error text-white"
+                          className={`font-semibold text-xs ${
+                            t.tipo_transaccion === "INGRESO" ? "text-success" : "text-error"
                           }`}
                         >
                           {t.tipo_transaccion}
@@ -341,7 +358,7 @@ export const Consultas = () => {
                         {formatCurrency(t.monto)}
                       </td>
                       <td>
-                        <span className="badge badge-sm badge-outline">{t.estado}</span>
+                        <span className="font-semibold text-xs">{t.estado}</span>
                       </td>
                     </tr>
                   ))

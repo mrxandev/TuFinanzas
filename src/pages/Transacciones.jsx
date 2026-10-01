@@ -272,13 +272,13 @@ export const Transacciones = () => {
       </div>
 
       {/* Barra de Filtros */}
-      <div className="card bg-base-100 shadow-sm border border-base-300">
-        <div className="card-body p-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="card bg-base-100 shadow-sm border border-base-200 rounded-2xl">
+        <div className="card-body p-5 space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             <div className="form-control">
-              <label className="label py-1 text-xs font-semibold">Tipo</label>
+              <label className="label py-1 text-xs font-semibold uppercase tracking-wider text-base-content/70">Tipo</label>
               <select
-                className="select select-bordered select-sm"
+                className="select select-bordered select-md w-full text-sm rounded-xl"
                 value={filters.tipo_transaccion}
                 onChange={(e) => setFilters({ ...filters, tipo_transaccion: e.target.value })}
               >
@@ -289,9 +289,9 @@ export const Transacciones = () => {
             </div>
 
             <div className="form-control">
-              <label className="label py-1 text-xs font-semibold">Estado</label>
+              <label className="label py-1 text-xs font-semibold uppercase tracking-wider text-base-content/70">Estado</label>
               <select
-                className="select select-bordered select-sm"
+                className="select select-bordered select-md w-full text-sm rounded-xl"
                 value={filters.estado}
                 onChange={(e) => setFilters({ ...filters, estado: e.target.value })}
               >
@@ -303,39 +303,39 @@ export const Transacciones = () => {
             </div>
 
             <div className="form-control">
-              <label className="label py-1 text-xs font-semibold">Desde</label>
+              <label className="label py-1 text-xs font-semibold uppercase tracking-wider text-base-content/70">Desde</label>
               <input
                 type="date"
-                className="input input-bordered input-sm"
+                className="input input-bordered input-md text-sm rounded-xl"
                 value={filters.fecha_desde}
                 onChange={(e) => setFilters({ ...filters, fecha_desde: e.target.value })}
               />
             </div>
 
             <div className="form-control">
-              <label className="label py-1 text-xs font-semibold">Hasta</label>
+              <label className="label py-1 text-xs font-semibold uppercase tracking-wider text-base-content/70">Hasta</label>
               <input
                 type="date"
-                className="input input-bordered input-sm"
+                className="input input-bordered input-md text-sm rounded-xl"
                 value={filters.fecha_hasta}
                 onChange={(e) => setFilters({ ...filters, fecha_hasta: e.target.value })}
               />
             </div>
           </div>
 
-          <div className="flex gap-2 mt-3">
+          <div className="flex flex-col sm:flex-row gap-3 pt-2 border-t border-base-200">
             <div className="relative flex-1">
               <input
                 type="text"
-                placeholder="Buscar por folio o comentario..."
-                className="input input-bordered input-sm w-full pl-9"
+                placeholder="Buscar por folio, concepto o comentario..."
+                className="input input-bordered input-md w-full pl-10 text-sm rounded-xl"
                 value={filters.busqueda}
                 onChange={(e) => setFilters({ ...filters, busqueda: e.target.value })}
               />
-              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40" />
+              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-base-content/40" />
             </div>
-            <button onClick={() => fetchTransacciones(1)} className="btn btn-secondary btn-sm gap-1">
-              <Filter className="w-4 h-4" /> Filtrar
+            <button onClick={() => fetchTransacciones(1)} className="btn btn-primary h-11 px-6 rounded-xl font-semibold gap-2">
+              <Filter className="w-4 h-4" /> Filtrar Resultados
             </button>
           </div>
         </div>
@@ -375,8 +375,8 @@ export const Transacciones = () => {
                       <td className="font-mono text-xs font-semibold">{t.numero_transaccion}</td>
                       <td>
                         <span
-                          className={`badge badge-sm font-semibold ${
-                            t.tipo_transaccion === "INGRESO" ? "badge-success text-white" : "badge-error text-white"
+                          className={`font-semibold text-xs ${
+                            t.tipo_transaccion === "INGRESO" ? "text-success" : "text-error"
                           }`}
                         >
                           {t.tipo_transaccion}
@@ -397,12 +397,12 @@ export const Transacciones = () => {
                       </td>
                       <td>
                         <span
-                          className={`badge badge-sm ${
+                          className={`font-semibold text-xs ${
                             t.estado === "APLICADA"
-                              ? "badge-success text-white"
+                              ? "text-success"
                               : t.estado === "PENDIENTE"
-                              ? "badge-warning"
-                              : "badge-error text-white"
+                              ? "text-warning"
+                              : "text-error"
                           }`}
                         >
                           {t.estado}
@@ -474,40 +474,52 @@ export const Transacciones = () => {
 
       {/* Modal de Registro / Edición */}
       {modalOpen && (
-        <div className="modal modal-open">
-          <div className="modal-box max-w-lg">
-            <h3 className="font-bold text-lg mb-4">
-              {editingId ? "Editar Transacción" : "Registrar Transacción"}
-            </h3>
+        <div className="modal modal-open bg-black/40 backdrop-blur-sm">
+          <div className="modal-box max-w-xl p-6 sm:p-8 rounded-2xl border border-base-200 shadow-xl">
+            <div className="flex items-center justify-between pb-4 mb-4 border-b border-base-200">
+              <h3 className="font-bold text-xl text-base-content flex items-center gap-2">
+                <Plus className="w-5 h-5 text-primary" />
+                {editingId ? "Editar Transacción" : "Registrar Transacción"}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setModalOpen(false)}
+                className="btn btn-sm btn-circle btn-ghost text-base-content/60"
+              >
+                ✕
+              </button>
+            </div>
 
-            <form onSubmit={handleSubmit} className="space-y-3">
+            <form onSubmit={handleSubmit} className="space-y-5">
               {!editingId && (
                 <div className="form-control">
-                  <label className="label py-1 text-xs font-semibold">Tipo de Transacción</label>
-                  <div className="flex gap-4">
-                    <label className="label cursor-pointer gap-2">
+                  <label className="label py-1 text-xs font-semibold uppercase tracking-wider text-base-content/70">
+                    Tipo de Transacción
+                  </label>
+                  <div className="grid grid-cols-2 gap-4 mt-1">
+                    <label className={`label cursor-pointer justify-center p-3 rounded-xl border transition-all ${formData.tipo_transaccion === "EGRESO" ? "border-rose-400 bg-rose-500/10 text-rose-500 font-bold" : "border-base-300 text-base-content/70"}`}>
                       <input
                         type="radio"
                         name="tipo_transaccion"
-                        className="radio radio-error radio-sm"
+                        className="radio radio-error radio-sm hidden"
                         value="EGRESO"
                         checked={formData.tipo_transaccion === "EGRESO"}
                         onChange={(e) => setFormData({ ...formData, tipo_transaccion: e.target.value })}
                         disabled={submitting}
                       />
-                      <span className="label-text">Egreso (Gasto)</span>
+                      <span className="text-sm">Egreso (Gasto)</span>
                     </label>
-                    <label className="label cursor-pointer gap-2">
+                    <label className={`label cursor-pointer justify-center p-3 rounded-xl border transition-all ${formData.tipo_transaccion === "INGRESO" ? "border-emerald-400 bg-emerald-500/10 text-emerald-500 font-bold" : "border-base-300 text-base-content/70"}`}>
                       <input
                         type="radio"
                         name="tipo_transaccion"
-                        className="radio radio-success radio-sm"
+                        className="radio radio-success radio-sm hidden"
                         value="INGRESO"
                         checked={formData.tipo_transaccion === "INGRESO"}
                         onChange={(e) => setFormData({ ...formData, tipo_transaccion: e.target.value })}
                         disabled={submitting}
                       />
-                      <span className="label-text">Ingreso</span>
+                      <span className="text-sm">Ingreso</span>
                     </label>
                   </div>
                 </div>
@@ -515,9 +527,11 @@ export const Transacciones = () => {
 
               {!editingId && formData.tipo_transaccion === "EGRESO" && (
                 <div className="form-control">
-                  <label className="label py-1 text-xs font-semibold">Concepto de Egreso</label>
+                  <label className="label py-1 text-xs font-semibold uppercase tracking-wider text-base-content/70">
+                    Concepto de Egreso
+                  </label>
                   <select
-                    className="select select-bordered select-sm w-full"
+                    className="select select-bordered select-md w-full text-sm rounded-xl"
                     value={formData.concepto_egreso_id}
                     onChange={(e) => setFormData({ ...formData, concepto_egreso_id: e.target.value })}
                     disabled={submitting}
@@ -535,9 +549,11 @@ export const Transacciones = () => {
 
               {!editingId && formData.tipo_transaccion === "INGRESO" && (
                 <div className="form-control">
-                  <label className="label py-1 text-xs font-semibold">Concepto de Ingreso</label>
+                  <label className="label py-1 text-xs font-semibold uppercase tracking-wider text-base-content/70">
+                    Concepto de Ingreso
+                  </label>
                   <select
-                    className="select select-bordered select-sm w-full"
+                    className="select select-bordered select-md w-full text-sm rounded-xl"
                     value={formData.concepto_ingreso_id}
                     onChange={(e) => setFormData({ ...formData, concepto_ingreso_id: e.target.value })}
                     disabled={submitting}
@@ -553,25 +569,35 @@ export const Transacciones = () => {
                 </div>
               )}
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div className="form-control">
-                  <label className="label py-1 text-xs font-semibold">Monto (RD$)</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    min="0.01"
-                    className="input input-bordered input-sm w-full font-bold"
-                    value={formData.monto}
-                    onChange={(e) => setFormData({ ...formData, monto: e.target.value })}
-                    disabled={submitting}
-                    required
-                  />
+                  <label className="label py-1 text-xs font-semibold uppercase tracking-wider text-base-content/70">
+                    Monto
+                  </label>
+                  <div className="join w-full">
+                    <span className="join-item btn btn-md btn-neutral no-animation font-bold text-xs px-3 rounded-l-xl">
+                      RD$
+                    </span>
+                    <input
+                      type="number"
+                      step="0.01"
+                      min="0.01"
+                      placeholder="0.00"
+                      className="join-item input input-bordered input-md w-full text-sm font-semibold rounded-r-xl"
+                      value={formData.monto}
+                      onChange={(e) => setFormData({ ...formData, monto: e.target.value })}
+                      disabled={submitting}
+                      required
+                    />
+                  </div>
                 </div>
 
                 <div className="form-control">
-                  <label className="label py-1 text-xs font-semibold">Medio de Pago</label>
+                  <label className="label py-1 text-xs font-semibold uppercase tracking-wider text-base-content/70">
+                    Medio de Pago
+                  </label>
                   <select
-                    className="select select-bordered select-sm w-full"
+                    className="select select-bordered select-md w-full text-sm rounded-xl"
                     value={formData.tipo_pago_id}
                     onChange={(e) => setFormData({ ...formData, tipo_pago_id: e.target.value })}
                     disabled={submitting}
@@ -588,57 +614,52 @@ export const Transacciones = () => {
 
               {!editingId && (
                 <div className="form-control">
-                  <label className="label py-1 text-xs font-semibold">Fecha Transacción</label>
+                  <label className="label py-1 text-xs font-semibold uppercase tracking-wider text-base-content/70">
+                    Fecha de Transacción
+                  </label>
                   <input
                     type="date"
-                    className="input input-bordered input-sm w-full"
+                    className="input input-bordered input-md w-full text-sm rounded-xl"
                     value={formData.fecha_transaccion}
                     onChange={(e) => setFormData({ ...formData, fecha_transaccion: e.target.value })}
                     disabled={submitting}
+                    max={new Date().toISOString().split("T")[0]}
                     required
                   />
                 </div>
               )}
 
-              <div className="form-control">
-                <label className="label py-1 text-xs font-semibold">Tarjeta Crédito / Débito (últimos 4 dígitos si aplica)</label>
-                <input
-                  type="text"
-                  placeholder="4532********9876"
-                  className="input input-bordered input-sm w-full"
-                  value={formData.numero_tarjeta_credito}
-                  onChange={(e) => setFormData({ ...formData, numero_tarjeta_credito: e.target.value })}
-                  disabled={submitting}
-                />
-              </div>
+<input type="hidden" value={formData.numero_tarjeta_credito} onChange={(e) => setFormData({ ...formData, numero_tarjeta_credito: e.target.value })} />
 
               <div className="form-control">
-                <label className="label py-1 text-xs font-semibold">Comentario / Nota</label>
+                <label className="label py-1 text-xs font-semibold uppercase tracking-wider text-base-content/70">
+                  Comentario / Justificación
+                </label>
                 <textarea
-                  className="textarea textarea-bordered textarea-sm w-full"
-                  placeholder="Detalle o justificación de la transacción..."
+                  className="textarea textarea-bordered text-sm w-full rounded-xl min-h-[80px]"
+                  placeholder="Escribe una nota o justificación de esta transacción..."
                   value={formData.comentario}
                   onChange={(e) => setFormData({ ...formData, comentario: e.target.value })}
                   disabled={submitting}
                 ></textarea>
               </div>
 
-              <div className="modal-action">
+              <div className="modal-action pt-4 border-t border-base-200">
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
                   disabled={submitting}
-                  className="btn btn-ghost btn-sm"
+                  className="btn btn-ghost h-11 px-6 rounded-xl font-semibold"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="btn btn-primary btn-sm flex items-center gap-2"
+                  className="btn btn-primary h-11 px-8 rounded-xl font-semibold gap-2"
                 >
-                  {submitting && <span className="loading loading-spinner loading-xs"></span>}
-                  Guardar
+                  {submitting && <span className="loading loading-spinner loading-sm"></span>}
+                  Guardar Transacción
                 </button>
               </div>
             </form>

@@ -44,10 +44,20 @@ export const Cortes = () => {
     fetchCortes(1);
   }, [fetchCortes]);
 
-  /* Ejecución del proceso de cierre de corte mensual con protección contra doble envío */
   const handleProcesarCorte = async (e) => {
     e.preventDefault();
     if (submitting) return;
+
+    const today = new Date();
+    if (Number(procesarForm.anio) > today.getFullYear() || 
+       (Number(procesarForm.anio) === today.getFullYear() && Number(procesarForm.mes) > today.getMonth() + 1)) {
+       Swal.fire({
+         icon: "error",
+         title: "Fecha Inválida",
+         text: "No puedes procesar un corte para un mes/año en el futuro."
+       });
+       return;
+    }
 
     const confirmResult = await Swal.fire({
       title: "¿Procesar Corte Mensual?",
@@ -161,11 +171,11 @@ export const Cortes = () => {
                       </td>
                       <td>
                         {c.supero_limite ? (
-                          <span className="badge badge-error text-white gap-1 font-semibold">
+                          <span className="font-semibold text-xs text-error gap-1">
                             <AlertTriangle className="w-3 h-3" /> Excedido
                           </span>
                         ) : (
-                          <span className="badge badge-success text-white gap-1 font-semibold">
+                          <span className="font-semibold text-xs text-success gap-1">
                             <CheckCircle2 className="w-3 h-3" /> Ok
                           </span>
                         )}
@@ -206,6 +216,7 @@ export const Cortes = () => {
                     value={procesarForm.anio}
                     onChange={(e) => setProcesarForm({ ...procesarForm, anio: e.target.value })}
                     disabled={submitting}
+                    max={new Date().getFullYear()}
                     required
                   />
                 </div>
@@ -321,8 +332,8 @@ export const Cortes = () => {
                         <td className="font-mono">{t.numero_transaccion}</td>
                         <td>
                           <span
-                            className={`badge badge-xs ${
-                              t.tipo_transaccion === "INGRESO" ? "badge-success text-white" : "badge-error text-white"
+                            className={`font-semibold text-xs ${
+                              t.tipo_transaccion === "INGRESO" ? "text-success" : "text-error"
                             }`}
                           >
                             {t.tipo_transaccion}

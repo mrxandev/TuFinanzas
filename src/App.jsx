@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import { ThemeProvider } from "./context/ThemeContext";
 import { Layout } from "./components/layout/Layout";
 
 import { Login } from "./pages/Login";
@@ -38,45 +39,54 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          {/* Rutas Públicas */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+    <ThemeProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* Rutas Públicas */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
 
-          {/* Rutas Protegidas dentro del Layout principal */}
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <Layout />
-              </ProtectedRoute>
-            }
-          >
-            <Route index element={<Dashboard />} />
-            <Route path="transacciones" element={<Transacciones />} />
-            <Route path="catalogos" element={<Catalogos />} />
-            <Route path="cortes" element={<Cortes />} />
-            <Route path="consultas" element={<Consultas />} />
-            <Route path="reportes" element={<Reportes />} />
-            <Route path="perfil" element={<Perfil />} />
-
-            {/* Ruta exclusiva para Administradores */}
+            {/* Rutas Protegidas dentro del Layout principal */}
             <Route
-              path="usuarios"
+              path="/"
               element={
-                <ProtectedRoute adminOnly={true}>
-                  <Usuarios />
+                <ProtectedRoute>
+                  <Layout />
                 </ProtectedRoute>
               }
-            />
-          </Route>
+            >
+              <Route index element={<Dashboard />} />
+              <Route path="transacciones" element={<Transacciones />} />
+              <Route path="cortes" element={<Cortes />} />
+              <Route path="consultas" element={<Consultas />} />
+              <Route path="reportes" element={<Reportes />} />
+              <Route path="perfil" element={<Perfil />} />
 
-          {/* Redirección por defecto */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+              {/* Rutas exclusivas para Administradores */}
+              <Route
+                path="catalogos"
+                element={
+                  <ProtectedRoute adminOnly={true}>
+                    <Catalogos />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="usuarios"
+                element={
+                  <ProtectedRoute adminOnly={true}>
+                    <Usuarios />
+                  </ProtectedRoute>
+                }
+              />
+            </Route>
+
+            {/* Redirección por defecto */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }

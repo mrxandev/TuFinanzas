@@ -77,11 +77,11 @@ export const Dashboard = () => {
             Resumen de tu salud financiera para el periodo activo.
           </p>
         </div>
-        <div className="flex gap-2">
-          <Link to="/transacciones" className="btn btn-primary btn-sm gap-2">
+        <div className="flex flex-wrap gap-2">
+          <Link to="/transacciones" className="btn btn-primary btn-sm sm:btn-md gap-2">
             <ArrowRightLeft className="w-4 h-4" /> Nueva Transacción
           </Link>
-          <Link to="/cortes" className="btn btn-outline btn-sm gap-2">
+          <Link to="/cortes" className="btn btn-outline btn-sm sm:btn-md gap-2">
             <CalendarCheck className="w-4 h-4" /> Realizar Corte
           </Link>
         </div>
@@ -89,7 +89,7 @@ export const Dashboard = () => {
 
       {/* Alerta Destacada si superó el límite mensual */}
       {limiteInfo?.supero_limite && (
-        <div className="alert alert-error shadow-md text-white">
+        <div className="alert alert-error shadow-md text-error-content">
           <AlertTriangle className="w-6 h-6 shrink-0" />
           <div>
             <h3 className="font-bold text-lg">Alerta de Límite de Egresos Excedido</h3>
@@ -233,8 +233,11 @@ export const Dashboard = () => {
               <tbody>
                 {safeRecentTrx.length === 0 ? (
                   <tr>
-                    <td colSpan="5" className="text-center py-6 text-base-content/50">
-                      No hay transacciones recientes registradas.
+                    <td colSpan="5" className="text-center py-8">
+                      <div className="flex flex-col items-center justify-center text-base-content/70 gap-2">
+                        <ArrowRightLeft className="w-8 h-8 opacity-50" />
+                        <p>No hay transacciones recientes registradas.</p>
+                      </div>
                     </td>
                   </tr>
                 ) : (
@@ -243,8 +246,8 @@ export const Dashboard = () => {
                       <td className="font-mono text-xs font-semibold">{t.numero_transaccion}</td>
                       <td>
                         <span
-                          className={`badge badge-sm font-semibold ${
-                            t.tipo_transaccion === "INGRESO" ? "badge-success text-white" : "badge-error text-white"
+                          className={`font-semibold text-xs ${
+                            t.tipo_transaccion === "INGRESO" ? "text-success" : "text-error"
                           }`}
                         >
                           {t.tipo_transaccion}
@@ -256,12 +259,12 @@ export const Dashboard = () => {
                       </td>
                       <td>
                         <span
-                          className={`badge badge-sm badge-outline ${
+                          className={`font-semibold text-xs ${
                             t.estado === "APLICADA"
-                              ? "badge-success"
+                              ? "text-success"
                               : t.estado === "PENDIENTE"
-                              ? "badge-warning"
-                              : "badge-error"
+                              ? "text-warning"
+                              : "text-error"
                           }`}
                         >
                           {t.estado}

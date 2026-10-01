@@ -31,16 +31,29 @@ api.interceptors.response.use(
     const status = error.response?.status;
 
     if (status === 401) {
-      localStorage.removeItem("tufinanzas_token");
-      localStorage.removeItem("tufinanzas_user");
-      Swal.fire({
-        icon: "warning",
-        title: "Sesión Expirada",
-        text: "Tu sesión ha expirado. Por favor ingresa nuevamente.",
-        confirmButtonColor: "#2563eb",
-      }).then(() => {
-        window.location.href = "/login";
-      });
+      const isLoginRequest = error.config?.url?.includes('/auth/login');
+      
+      if (isLoginRequest) {
+        Swal.fire({
+          icon: "error",
+          title: "Error de autenticación",
+          text: message || "Credenciales incorrectas",
+          confirmButtonColor: "#ef4444",
+        });
+      } else {
+        localStorage.removeItem("tufinanzas_token");
+        localStorage.removeItem("tufinanzas_user");
+        Swal.fire({
+          icon: "warning",
+          title: "Sesión Expirada",
+          text: "Tu sesión ha expirado. Por favor ingresa nuevamente.",
+          confirmButtonColor: "#2563eb",
+        }).then(() => {
+          if (window.location.pathname !== "/login") {
+            window.location.href = "/login";
+          }
+        });
+      }
     } else if (status === 403) {
       Swal.fire({
         icon: "error",
