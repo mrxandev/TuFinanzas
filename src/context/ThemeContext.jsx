@@ -4,22 +4,22 @@ const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem("daisyui-theme") || "dark";
+    return localStorage.getItem("daisyui-theme-v2") || "light";
   });
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("daisyui-theme", theme);
+    localStorage.setItem("daisyui-theme-v2", theme);
   }, [theme]);
 
   const changeTheme = (newTheme) => {
     setTheme(newTheme);
     document.documentElement.setAttribute("data-theme", newTheme);
-    localStorage.setItem("daisyui-theme", newTheme);
+    localStorage.setItem("daisyui-theme-v2", newTheme);
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, changeTheme, themes: ["dark"] }}>
+    <ThemeContext.Provider value={{ theme, changeTheme, themes: ["light", "dark", "dim"] }}>
       {children}
     </ThemeContext.Provider>
   );

@@ -34,6 +34,10 @@ html, body, #root {
   color: var(--primary-color) !important;
 }
 
+.text-primary-content {
+  color: var(--primary-text) !important;
+}
+
 .bg-primary {
   background-color: var(--primary-color) !important;
 }

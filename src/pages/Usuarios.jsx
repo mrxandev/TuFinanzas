@@ -240,7 +240,7 @@ export const Usuarios = () => {
                       <td className="font-bold text-sm">{u.nombre}</td>
                       <td className="text-sm">{u.email}</td>
                       <td>
-                        <span className={`badge badge-sm ${u.role === "ADMIN" ? "badge-secondary" : "badge-outline"}`}>
+                        <span className={`font-semibold text-xs ${u.role === "ADMIN" ? "text-secondary" : "text-slate-500"}`}>
                           <Shield className="w-3 h-3 mr-1" /> {u.role}
                         </span>
                       </td>
@@ -250,12 +250,12 @@ export const Usuarios = () => {
                       <td className="text-sm font-semibold">Día {u.fecha_corte}</td>
                       <td>
                         <span
-                          className={`badge badge-sm ${
+                          className={`font-semibold text-xs ${
                             u.estado === "ACTIVO"
-                              ? "badge-success text-success-content"
+                              ? "text-success"
                               : u.estado === "INACTIVO"
-                              ? "badge-ghost"
-                              : "badge-error text-error-content"
+                              ? "text-slate-500"
+                              : "text-error"
                           }`}
                         >
                           {u.estado}

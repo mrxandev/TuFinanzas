@@ -160,7 +160,7 @@ export const Catalogos = () => {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-bold tracking-tight">Catálogos Maestros</h1>
-            <span className="badge badge-secondary badge-sm flex items-center gap-1 font-semibold">
+            <span className="text-secondary text-xs flex items-center gap-1 font-semibold">
               <Shield className="w-3 h-3" /> Solo Admin
             </span>
           </div>
@@ -246,8 +246,8 @@ export const Catalogos = () => {
                       )}
                       <td>
                         <span
-                          className={`badge badge-sm ${
-                            item.estado === "ACTIVO" ? "badge-success text-success-content" : "badge-ghost"
+                          className={`font-semibold text-xs ${
+                            item.estado === "ACTIVO" ? "text-success" : "text-slate-500"
                           }`}
                         >
                           {item.estado}

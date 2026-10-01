@@ -345,8 +345,8 @@ export const Consultas = () => {
                       <td className="font-mono text-xs font-semibold">{t.numero_transaccion}</td>
                       <td>
                         <span
-                          className={`badge badge-sm ${
-                            t.tipo_transaccion === "INGRESO" ? "badge-success text-success-content" : "badge-error text-error-content"
+                          className={`font-semibold text-xs ${
+                            t.tipo_transaccion === "INGRESO" ? "text-success" : "text-error"
                           }`}
                         >
                           {t.tipo_transaccion}
@@ -358,7 +358,7 @@ export const Consultas = () => {
                         {formatCurrency(t.monto)}
                       </td>
                       <td>
-                        <span className="badge badge-sm badge-outline">{t.estado}</span>
+                        <span className="font-semibold text-xs">{t.estado}</span>
                       </td>
                     </tr>
                   ))

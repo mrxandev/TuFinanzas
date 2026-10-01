@@ -246,8 +246,8 @@ export const Dashboard = () => {
                       <td className="font-mono text-xs font-semibold">{t.numero_transaccion}</td>
                       <td>
                         <span
-                          className={`badge badge-sm font-semibold ${
-                            t.tipo_transaccion === "INGRESO" ? "badge-success text-success-content" : "badge-error text-error-content"
+                          className={`font-semibold text-xs ${
+                            t.tipo_transaccion === "INGRESO" ? "text-success" : "text-error"
                           }`}
                         >
                           {t.tipo_transaccion}
@@ -259,12 +259,12 @@ export const Dashboard = () => {
                       </td>
                       <td>
                         <span
-                          className={`badge badge-sm badge-outline ${
+                          className={`font-semibold text-xs ${
                             t.estado === "APLICADA"
-                              ? "badge-success"
+                              ? "text-success"
                               : t.estado === "PENDIENTE"
-                              ? "badge-warning"
-                              : "badge-error"
+                              ? "text-warning"
+                              : "text-error"
                           }`}
                         >
                           {t.estado}

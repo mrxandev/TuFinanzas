@@ -212,7 +212,7 @@ export const Reportes = () => {
                               {formatCurrency(c.balance_al_corte)}
                             </td>
                             <td>
-                              <span className={`badge badge-sm ${c.supero_limite ? "badge-error text-error-content" : "badge-success text-success-content"}`}>
+                              <span className={`font-semibold text-xs ${c.supero_limite ? "text-error" : "text-success"}`}>
                                 {c.supero_limite ? "SÍ" : "NO"}
                               </span>
                             </td>
@@ -286,7 +286,7 @@ export const Reportes = () => {
                                 <span className="text-xs ml-2 font-bold">{h.porcentaje_consumido}%</span>
                               </td>
                               <td>
-                                <span className={`badge badge-sm ${h.supero_limite ? "badge-error text-error-content" : "badge-success text-success-content"}`}>
+                                <span className={`font-semibold text-xs ${h.supero_limite ? "text-error" : "text-success"}`}>
                                   {h.supero_limite ? "Excedido" : "Cumplido"}
                                 </span>
                               </td>

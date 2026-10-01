@@ -375,8 +375,8 @@ export const Transacciones = () => {
                       <td className="font-mono text-xs font-semibold">{t.numero_transaccion}</td>
                       <td>
                         <span
-                          className={`badge badge-sm font-semibold ${
-                            t.tipo_transaccion === "INGRESO" ? "badge-success text-success-content" : "badge-error text-error-content"
+                          className={`font-semibold text-xs ${
+                            t.tipo_transaccion === "INGRESO" ? "text-success" : "text-error"
                           }`}
                         >
                           {t.tipo_transaccion}
@@ -397,12 +397,12 @@ export const Transacciones = () => {
                       </td>
                       <td>
                         <span
-                          className={`badge badge-sm ${
+                          className={`font-semibold text-xs ${
                             t.estado === "APLICADA"
-                              ? "badge-success text-success-content"
+                              ? "text-success"
                               : t.estado === "PENDIENTE"
-                              ? "badge-warning"
-                              : "badge-error text-error-content"
+                              ? "text-warning"
+                              : "text-error"
                           }`}
                         >
                           {t.estado}
@@ -629,19 +629,7 @@ export const Transacciones = () => {
                 </div>
               )}
 
-              <div className="form-control">
-                <label className="label py-1 text-xs font-semibold uppercase tracking-wider text-base-content/70">
-                  Tarjeta Crédito / Débito (Últimos 4 dígitos si aplica)
-                </label>
-                <input
-                  type="text"
-                  placeholder="4532********9876"
-                  className="input input-bordered input-md w-full text-sm rounded-xl font-mono"
-                  value={formData.numero_tarjeta_credito}
-                  onChange={(e) => setFormData({ ...formData, numero_tarjeta_credito: e.target.value })}
-                  disabled={submitting}
-                />
-              </div>
+<input type="hidden" value={formData.numero_tarjeta_credito} onChange={(e) => setFormData({ ...formData, numero_tarjeta_credito: e.target.value })} />
 
               <div className="form-control">
                 <label className="label py-1 text-xs font-semibold uppercase tracking-wider text-base-content/70">
