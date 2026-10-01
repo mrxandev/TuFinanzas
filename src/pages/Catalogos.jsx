@@ -247,7 +247,7 @@ export const Catalogos = () => {
                       <td>
                         <span
                           className={`font-semibold text-xs ${
-                            item.estado === "ACTIVO" ? "text-success" : "text-slate-500"
+                            item.estado === "ACTIVO" ? "text-success" : "text-base-content/60"
                           }`}
                         >
                           {item.estado}

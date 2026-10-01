@@ -240,7 +240,7 @@ export const Usuarios = () => {
                       <td className="font-bold text-sm">{u.nombre}</td>
                       <td className="text-sm">{u.email}</td>
                       <td>
-                        <span className={`font-semibold text-xs ${u.role === "ADMIN" ? "text-secondary" : "text-slate-500"}`}>
+                        <span className={`font-semibold text-xs ${u.role === "ADMIN" ? "text-secondary" : "text-base-content/60"}`}>
                           <Shield className="w-3 h-3 mr-1" /> {u.role}
                         </span>
                       </td>
@@ -254,7 +254,7 @@ export const Usuarios = () => {
                             u.estado === "ACTIVO"
                               ? "text-success"
                               : u.estado === "INACTIVO"
-                              ? "text-slate-500"
+                              ? "text-base-content/60"
                               : "text-error"
                           }`}
                         >

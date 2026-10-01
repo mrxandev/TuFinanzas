@@ -474,7 +474,7 @@ export const Transacciones = () => {
 
       {/* Modal de Registro / Edición */}
       {modalOpen && (
-        <div className="modal modal-open bg-black/40 backdrop-blur-sm">
+        <div className="modal modal-open">
           <div className="modal-box max-w-xl p-6 sm:p-8 rounded-2xl border border-base-200 shadow-xl">
             <div className="flex items-center justify-between pb-4 mb-4 border-b border-base-200">
               <h3 className="font-bold text-xl text-base-content flex items-center gap-2">

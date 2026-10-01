@@ -44,7 +44,7 @@ export const Layout = () => {
           <Sidebar isMinimized={false} onLinkClick={toggleSidebar} />
         </div>
 
-        <main className="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto bg-base-100 min-h-0">
+        <main className="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto bg-base-200 min-h-0">
           <Outlet />
         </main>
       </div>
