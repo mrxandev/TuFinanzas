@@ -1,5 +1,43 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
+export const DAISY_THEMES = [
+  "light",
+  "dark",
+  "cupcake",
+  "bumblebee",
+  "emerald",
+  "corporate",
+  "synthwave",
+  "retro",
+  "cyberpunk",
+  "valentine",
+  "halloween",
+  "garden",
+  "forest",
+  "aqua",
+  "lofi",
+  "pastel",
+  "fantasy",
+  "wireframe",
+  "black",
+  "luxury",
+  "dracula",
+  "cmyk",
+  "autumn",
+  "business",
+  "acid",
+  "lemonade",
+  "night",
+  "coffee",
+  "winter",
+  "dim",
+  "nord",
+  "sunset",
+  "caramellatte",
+  "abyss",
+  "silk",
+];
+
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
@@ -19,7 +57,7 @@ export const ThemeProvider = ({ children }) => {
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, changeTheme, themes: ["light", "dark", "dim"] }}>
+    <ThemeContext.Provider value={{ theme, changeTheme, themes: DAISY_THEMES }}>
       {children}
     </ThemeContext.Provider>
   );

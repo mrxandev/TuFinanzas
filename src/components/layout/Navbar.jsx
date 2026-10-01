@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { LogOut, User, Shield, Wallet, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ThemeSelector } from "../ThemeSelector";
 
 export const Navbar = ({ onToggleSidebar, isMinimized }) => {
   const { user, logout } = useAuth();
@@ -48,7 +49,10 @@ export const Navbar = ({ onToggleSidebar, isMinimized }) => {
         </span>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3">
+        {/* Selector de temas daisyUI */}
+        <ThemeSelector />
+
         {/* Menú de Perfil */}
         <div ref={profileRef} className="relative inline-block text-left">
           <button

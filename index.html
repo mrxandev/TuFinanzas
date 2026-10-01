@@ -1,11 +1,19 @@
 <!doctype html>
-<html lang="es" data-theme="dark">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="/src/index.css" rel="stylesheet">
+    <link href="/src/index.css" rel="stylesheet" />
     <title>TuFinanzas - Gestión de Finanzas Personales</title>
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem("daisyui-theme-v2") || "light";
+          document.documentElement.setAttribute("data-theme", saved);
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
